@@ -148,7 +148,8 @@ export default class adminnft extends Component {
                 cell: (item) => {
                     return (
                         <>
-                            {/* <button type="submit" onClick={this.editDataAPI.bind(this, item)} data-toggle="modal" data-target="#responsive-modal2" className="btn-primary" data-original-title="Edit"> <i class="fa fa-pencil text-inverse m-r-10"></i> </button>&nbsp; */}
+                          <div className='d-flex' style={{display:"flex"}}>
+                                {/* <button type="submit" onClick={this.editDataAPI.bind(this, item)} data-toggle="modal" data-target="#responsive-modal2" className="btn-primary" data-original-title="Edit"> <i class="fa fa-pencil text-inverse m-r-10"></i> </button>&nbsp; */}
                             {item.is_active == 1 ?
                                 <button type="submit" onClick={this.hideNFTAPI.bind(this, item)} data-toggle="tooltip" data-original-title="Close" className=" btn-primary"> <i class="fa fa-minus-square m-r-10"></i> </button> :
                                 <button type="submit" onClick={this.showNFTAPI.bind(this, item)} data-toggle="tooltip" data-original-title="Close" className=" btn-primary"> <i class="fa fa-plus-square m-r-10"></i> </button>
@@ -156,25 +157,25 @@ export default class adminnft extends Component {
                             {this.loginData?.id == item.owner_id ?
                                 item.is_on_sale == 1 ?
                                     <div>
-                                        <a onClick={this.cancelOrder.bind(this, item)} className='putonsale' > Cancel Order </a>
+                                       <button type='button' className='btn-primary'> <a onClick={this.cancelOrder.bind(this, item)} className='putonsale' style={{color:"#fff"}} > Cancel listing </a></button>
                                     </div>
                                     :
                                     <>
                                         <div>
 
-                                            <Link style={{ padding: '5px' }} to={`${config.baseUrl}editNft/` + item.id} className="btn-primary"><i class="fa fa-pencil text-inverse m-r-10"></i></Link>&nbsp;
-                                            <a onClick={this.putOnSaleModelAPI.bind(this, item, 1)} className='putonsale' data-toggle="modal" data-target="#putOnSale"> Put on sale </a>
-
+                                        <button className='btn-primary'> <Link to={`${config.baseUrl}editNft/` + item.id} className="btn-primary"><i class="fa fa-pencil text-inverse m-r-10"></i></Link>&nbsp;</button>
+                                            <button className='btn-primary'>   <a onClick={this.putOnSaleModelAPI.bind(this, item, 1)} className='putonsale' data-toggle="modal" data-target="#putOnSale"> Put on sale </a></button>
                                         </div>
                                     </>
                                 : ""}
                             {item.sell_type == 2 ?
-                                <button style={{ marginTop: '5px' }}
+                                <button
                                     type='button' onClick={this.getBidDetailAPI.bind(this, item)} data-toggle="modal" data-target="#exampleModalCenter" className="btn-primary">
                                     View Bid</button> : ''
                             }
 
 
+                          </div>
                         </>
                     );
                 }
@@ -1865,7 +1866,7 @@ export default class adminnft extends Component {
                                 <div className="spacer-10" />
                                 <br />
                                 {this.state.spinLoader === 0 ?
-                                    <input type="submit" onClick={this.approveNFT.bind(this, this.state.nftData)} value="Approve" id="submit" className="btn-main" defaultValue="Create Item" />
+                                    <input type="submit" onClick={this.approveNFT.bind(this, this.state.nftData)} value="Approve" id="submit" className="btn-primary" defaultValue="Create Item" />
                                     :
                                     <button disabled className="btn-main" id="deposit-page" >Processing &nbsp; <i className="fa fa-spinner fa-spin validat"></i></button>
                                 }

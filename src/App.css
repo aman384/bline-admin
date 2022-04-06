@@ -239,9 +239,9 @@ i.fa.fa-bars.scrollable {
   float: none;
   margin: 0 10px 0 0;
 }
-.de_countdown, .container-timeline ul li::before, .de_tab.tab_methods .de_nav li.active span {
+/* .de_countdown, .container-timeline ul li::before, .de_tab.tab_methods .de_nav li.active span {
   border-color: var(--secondary-color);
-}
+} */
 .de_tab.tab_methods .de_nav li span i {
   display: block;
   font-size: 30px;

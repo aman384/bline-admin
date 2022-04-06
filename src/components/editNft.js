@@ -45,7 +45,7 @@ export default class editNft extends Component {
             currentDate: '',
             endDate: '',
         }
-        this.loginData = (!Cookies.get('loginSuccessBline')) ? [] : JSON.parse(Cookies.get('loginSuccessBline'));
+        this.loginData = (!Cookies.get('loginSuccessblineAdmin')) ? [] : JSON.parse(Cookies.get('loginSuccessblineAdmin'));
         this.token = (!Cookies.get('token')) ? [] : JSON.parse(Cookies.get('token'));
         this.updateNftAPI = this.updateNftAPI.bind(this)
         this.onChange = this.handleChange.bind(this);
@@ -67,9 +67,9 @@ export default class editNft extends Component {
 
         Cookies.set('selectedTab', '1');
 
-        if (!this.loginData?.id) {
-            window.location.href = `${config.baseUrl}`
-        }
+        // if (!this.loginData?.id) {
+        //     window.location.href = `${config.baseUrl}`
+        // }
         this.getCategoryAPI()
         this.getUserCollectionAPI()
         this.getNftDetailsAPI()
@@ -430,15 +430,20 @@ export default class editNft extends Component {
                                                                 <span className="error-asterick"> {this.state.imageError}</span>
                                                             </div>
                                                             <div className="spacer-single" />
-                                                            <h5>Title</h5>
+                                                         <div className='form-group'>
+                                                                 <h5>Title</h5>
                                                             <input type="text" name="name" onChange={this.handleChange} id="item_title" value={this.state.nftData?.name} className="form-control" placeholder="e.g. 'Crypto Funk" />
                                                             <span className="error-asterick"> {this.state.nameError}</span>
-                                                            <div className="spacer-10" />
-                                                            <h5>Description</h5>
+                                                         </div>
+                                                        
+                                                          <div className='form-group'>
+                                                          <h5>Description</h5>
                                                             <textarea data-autoresize name="description" onChange={this.handleChange} id="item_desc" className="form-control" placeholder="e.g. 'This is very limited item'" value={this.state.nftData?.description} ></textarea>
                                                             <span className="error-asterick"> {this.state.descError}</span>
-                                                            <div className="spacer-10" />
+                                                          </div>
+                                                           
                                                             <div className="collection-drop">
+                                                                <div className='form-group'>
                                                                 <h5>Collection</h5>
                                                                 <select onChange={this.handleChange} value={this.state.nftData?.user_collection_id} className="form-control" name="user_collection_id">
                                                                     <option value="">Select Collection</option>
@@ -447,6 +452,8 @@ export default class editNft extends Component {
                                                                     ))}
                                                                 </select>
                                                                 <span className="error-asterick"> {this.state.collectionError}</span>
+                                                                </div>
+                                                                <div className='form-group'>
                                                                 <h5>Categories</h5>
                                                                 <select onChange={this.handleChange} value={this.state.nftData?.item_category_id} className="form-control" name="item_category_id">
                                                                     <option value="">Select Category</option>
@@ -455,12 +462,14 @@ export default class editNft extends Component {
                                                                     ))}
                                                                 </select>
                                                                 <span className="error-asterick"> {this.state.categoryError}</span>
+                                                                </div>
                                                             </div>
-                                                            <div className="spacer-10" />
-                                                            <h5>Royalties</h5>
+                                                          <div className='form-group'>
+                                                                <h5>Royalties</h5>
                                                             <input onKeyPress={(event) => { if (!/^\d*[.]?\d{0,1}$/.test(event.key)) { event.preventDefault(); } }} type="text" value={this.state.nftData?.royalty_percent} onChange={this.handleChange} name="royalty_percent" id="item_royalties" className="form-control" placeholder="suggested: 0%, 5%, 10%, 20%. Maximum is 25%" />
-                                                            <div className="spacer-10" />
-                                                            <h5>Select sale method</h5>
+                                                          </div>
+                                                        <div className='form-group'>
+                                                        <h5>Select sale method</h5>
                                                             <div className="de_tab tab_methods">
                                                                 <ul className="de_nav">
                                                                     <li onClick={this.sellType.bind(this, 1)} className={this.state.nftData?.sell_type == 1 ? 'active' : ''}><span><i className="fa fa-tag" />Price</span>
@@ -503,8 +512,9 @@ export default class editNft extends Component {
 
                                                                 </div>
                                                             </div>
+                                                        </div>
                                                             <div className="form-group">
-                                                                <label className="control-label mb-10">Trending Status</label>
+                                                                <h5 className="control-label mb-10">Trending Status</h5>
                                                                 <div className="customSelectHolder">
 
                                                                     <select onChange={this.handleChange} name='is_featured' value={this.state.nftData?.is_featured} className="form-control" >
@@ -515,7 +525,7 @@ export default class editNft extends Component {
                                                             </div>
 
                                                             <div className="form-group">
-                                                                <label className="control-label mb-10">Sell / Not on sell</label>
+                                                                <h5 className="control-label mb-10">Sell / Not on sell</h5>
                                                                 <div className="customSelectHolder">
 
                                                                     <select onChange={this.handleChange} name='is_on_sale' value={this.state.nftData?.is_on_sale} className="form-control" >
@@ -529,9 +539,9 @@ export default class editNft extends Component {
                                                             </div>
                                                             <div className="spacer-10" />
                                                             {this.state.spinLoader === '0' ?
-                                                                <input type="submit" onClick={this.updateNftAPI} value="Update" id="submit" className="btn-main" defaultValue="Create Item" />
+                                                                <input type="submit" onClick={this.updateNftAPI} value="Update" id="submit" className="btn-primary" defaultValue="Create Item" />
                                                                 :
-                                                                <button className="btn-main" id="deposit-page" >Updating NFT &nbsp; <i className="fa fa-spinner fa-spin validat"></i></button>
+                                                                <button className="btn-primary" id="deposit-page" >Updating NFT &nbsp; <i className="fa fa-spinner fa-spin validat"></i></button>
                                                             }
                                                             <div className="spacer-single" />
                                                         </div></form>
