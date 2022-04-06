@@ -33,60 +33,151 @@ export default class transaction extends Component {
         this.loginData = (!Cookies.get('loginSuccessblineAdmin')) ? [] : JSON.parse(Cookies.get('loginSuccessblineAdmin'));
         this.userTransaction = this.userTransaction.bind(this);
         this.onChange = this.onChange.bind(this)
+        // this.columns = [
+        //     {
+        //         key: '#',
+        //         text: 'Sr. No.',
+        //         cell: (row, index) => index + 1
+        //     },
+
+        //     {
+        //         key: "from_address",
+        //         text: "From Address",
+        //         cell: (item) => {
+        //             return (
+        //                 <td nowrap="nowrap">
+        //                     <span>
+        //                         <p title={item.from_address}>{item.from_address == null ? '' : item.from_address.toString().substring(0, 8) + '...' + item.from_address.toString().substr(item.from_address.length - 8)}</p>
+        //                     </span>
+        //                 </td>
+        //             )
+        //         }
+        //     },
+
+        //     {
+        //         key: "to_address",
+        //         text: "To Address",
+        //         cell: (item) => {
+        //             return (
+        //                 <td nowrap="nowrap">
+        //                     <span>
+        //                         <p title={item.to_address}>{item.to_address == null ? '' : item.to_address.toString().substring(0, 8) + '...' + item.to_address.toString().substr(item.to_address.length - 8)}</p>
+        //                     </span>
+        //                 </td>
+        //             )
+        //         }
+        //     },
+
+        //     {
+        //         key: "hash",
+        //         text: "Hash",
+        //         cell: (item) => {
+        //             return (
+        //                 <td nowrap="nowrap">
+        //                     <span>
+
+        //                     </span>
+        //                     <>
+        //                         <a href={`https:/ropsten.etherscan.io/tx/${item.hash}`} target="_blank" >
+        //                             <p title={item.hash}>{item.hash == null ? '' : item.hash.toString().substring(0, 8) + '...' + item.hash.toString().substr(item.hash.length - 8)}</p>
+        //                         </a>
+
+        //                     </>
+        //                 </td>
+        //             )
+        //         }
+        //     },
+
+        //     {
+        //         key: "amount",
+        //         text: "AMOUNT",
+        //         sortable: true,
+
+        //     },
+        //     {
+        //         key: "currency",
+        //         text: "Currency",
+        //         sortable: true,
+
+        //     },
+        //     {
+        //         key: "transaction_type",
+        //         text: "Transaction Type",
+        //         sortable: true,
+        //         cell: (item) => {
+        //             return (
+        //                 item.transaction_type == 'Sell' ?
+        //                     <td nowrap="nowrap" style={{ 'color': 'red' }}>
+        //                         {item.transaction_type}
+        //                     </td>
+        //                     :
+        //                     item.transaction_type == 'Buy' ?
+        //                         <td nowrap="nowrap" style={{ 'color': 'blue' }}>
+        //                             {item.transaction_type}
+        //                         </td>
+        //                         :
+        //                         item.transaction_type == 'Withdrawal' ?
+        //                             <td nowrap="nowrap" style={{ 'color': 'Green' }}>
+        //                                 {item.transaction_type}
+        //                             </td>
+        //                             :
+        //                             item.transaction_type == 'Royalty Received' ?
+        //                                 <td nowrap="nowrap" style={{ 'color': 'black' }}>
+        //                                     {item.transaction_type}
+        //                                 </td>
+        //                                 :
+        //                                 <td nowrap="nowrap">
+        //                                     {item.transaction_type}
+        //                                 </td>
+        //             );
+        //         }
+
+        //     },
+        //     {
+        //         key: "transaction_status",
+        //         text: "Transaction Status",
+        //         sortable: true,
+
+        //     },
+        //     {
+        //         key: "datetime",
+        //         text: "Date",
+        //         cell: (item) => {
+        //             return (
+        //                 <td nowrap="nowrap">
+        //                     {item.datetime.slice(0, 10)}
+        //                 </td>
+        //             );
+        //         }
+        //     },
+        // ];
+
         this.columns = [
             {
                 key: '#',
-                text: 'Sr. No.',
+                text: '#',
                 cell: (row, index) => index + 1
             },
 
             {
-                key: "from_address",
-                text: "From Address",
-                cell: (item) => {
-                    return (
-                        <td nowrap="nowrap">
-                            <span>
-                                <p title={item.from_address}>{item.from_address == null ? '' : item.from_address.toString().substring(0, 8) + '...' + item.from_address.toString().substr(item.from_address.length - 8)}</p>
-                            </span>
-                        </td>
-                    )
-                }
+                key: "full_name",
+                text: "User Name"
             },
 
             {
-                key: "to_address",
-                text: "To Address",
+                key: "item_name",
+                text: "NFT Name",
                 cell: (item) => {
                     return (
-                        <td nowrap="nowrap">
-                            <span>
-                                <p title={item.to_address}>{item.to_address == null ? '' : item.to_address.toString().substring(0, 8) + '...' + item.to_address.toString().substr(item.to_address.length - 8)}</p>
-                            </span>
-                        </td>
-                    )
+                        <>
+                            <a href={`${config.redirectUrl + 'nftDetails/' + item.item_id}`} target="_blank" >
+                                {item.item_name}
+                            </a>
+
+                        </>
+                    );
                 }
-            },
-
-            {
-                key: "hash",
-                text: "Hash",
-                cell: (item) => {
-                    return (
-                        <td nowrap="nowrap">
-                            <span>
-
-                            </span>
-                            <>
-                                <a href={`https:/ropsten.etherscan.io/tx/${item.hash}`} target="_blank" >
-                                    <p title={item.hash}>{item.hash == null ? '' : item.hash.toString().substring(0, 8) + '...' + item.hash.toString().substr(item.hash.length - 8)}</p>
-                                </a>
-
-                            </>
-                        </td>
-                    )
-                }
-            },
+            },           
 
             {
                 key: "amount",
@@ -94,12 +185,12 @@ export default class transaction extends Component {
                 sortable: true,
 
             },
-            {
-                key: "currency",
-                text: "Currency",
-                sortable: true,
+            // {
+            //     key: "currency",
+            //     text: "Currency",
+            //     sortable: true,
 
-            },
+            // },
             {
                 key: "transaction_type",
                 text: "Transaction Type",
@@ -150,6 +241,25 @@ export default class transaction extends Component {
                     );
                 }
             },
+            {
+                key: "hash",
+                text: "Hash",
+                cell: (item) => {
+                    return (
+                        <td nowrap="nowrap">
+                            <span>
+
+                            </span>
+                            <>
+                                <a href={config.blockchainUrltrx + item.hash} target="_blank" >
+                                    <p title={item.hash}>{item.hash == null ? '' : item.hash.toString().substring(0, 8) + '...' + item.hash.toString().substr(item.hash.length - 8)}</p>
+                                </a>
+
+                            </>
+                        </td>
+                    )
+                }
+            },            
         ];
         this.config = {
             page_size: 10,
@@ -253,7 +363,7 @@ export default class transaction extends Component {
                                     <h5 className="txt-dark">Users Transaction</h5>
                                 </div>
                             </div>
-                            <div className="row mb-4">
+                            {/* <div className="row mb-4">
                                 <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12">
                                     <div className='bannerimage'>
                                         {console.log(this.state.transaction_type)}
@@ -300,7 +410,7 @@ export default class transaction extends Component {
                                     </div>
                                 </div>
                                 <br />
-                            </div>
+                            </div> */}
                             <div className="row">
                                 <div className="col-sm-12">
                                     <div className="table-responsive">

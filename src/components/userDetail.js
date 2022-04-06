@@ -31,7 +31,7 @@ export default class userDetails extends Component {
 
         this.loginData = (!Cookies.get('loginSuccessblineAdmin')) ? [] : JSON.parse(Cookies.get('loginSuccessblineAdmin'));
         this.token = (!Cookies.get('token')) ? [] : JSON.parse(Cookies.get('token'));
-        
+
         const { match: { params } } = this.props;
         this.userid = params.id
         // alert(this.userid)
@@ -41,7 +41,7 @@ export default class userDetails extends Component {
             {
                 key: '#',
                 text: 'Sr. No.',
-                cell: (row, index) => index + 1
+                cell: (row, index) => index + 1,
             },
             {
                 key: "name",
@@ -149,9 +149,9 @@ export default class userDetails extends Component {
                 cell: (item) => {
                     return (
                         <td nowrap="nowrap">
-                            <p>{item?.facebook === '' && item?.insta === '' && item?.telegram === '' && item?.twitter === '' && item?.discord === '' ? 'N/A' :
+                            <p className='circle-icon'>{item?.facebook === '' && item?.insta === '' && item?.telegram === '' && item?.twitter === '' && item?.discord === '' ? 'N/A' :
 
-                                item?.facebook ? <a href={item?.facebook} target="_blank"> <i className="fa fa-facebook-square" aria-hidden="true"></i>&nbsp;</a> : ''}
+                                item?.facebook ? <a href={item?.facebook} target="_blank"> <i className="fa fa-facebook" aria-hidden="true"></i>&nbsp;</a> : ''}
                                 {item?.insta ? <a href={item?.insta} target="_blank"> <i className="fa fa-instagram" aria-hidden="true"></i>&nbsp;</a> : ''}
                                 {item?.telegram ? <a href={item?.telegram} target="_blank"> <i className="fa fa-telegram" aria-hidden="true"></i>&nbsp;</a> : ''}
                                 {item?.twitter ? <a href={item?.twitter} target="_blank"> <i className="fa fa-twitter" aria-hidden="true"></i>&nbsp;</a> : ''}
@@ -272,7 +272,7 @@ export default class userDetails extends Component {
                 text: "NFT Creator",
 
             },
-             {
+            {
                 key: "owner_name",
                 text: "NFT Owner",
 
@@ -483,7 +483,7 @@ export default class userDetails extends Component {
             method: 'post',
             url: `${config.apiUrl}getUserTransaction`,
             headers: { "Authorization": this.loginData?.Token },
-            data: { user_id: this.userid,'is_admin':this.loginData.data.is_admin }
+            data: { user_id: this.userid, 'is_admin': this.loginData.data.is_admin }
         })
             .then(result => {
                 const data = result.data;
@@ -507,7 +507,7 @@ export default class userDetails extends Component {
             method: 'post',
             url: `${config.apiUrl}getUserItem`,
             headers: { "Authorization": this.loginData?.Token },
-            data: { user_id: this.userid, 'is_admin':this.loginData.data.is_admin,"login_user_id": 0, "user_collection_id": 0, "is_trending": 0, "recent": 0, "limit": 0 }
+            data: { user_id: this.userid, 'is_admin': this.loginData.data.is_admin, "login_user_id": 0, "user_collection_id": 0, "is_trending": 0, "recent": 0, "limit": 0 }
         })
             .then(result => {
                 const data = result.data;
@@ -563,7 +563,7 @@ export default class userDetails extends Component {
                         <div className="pcoded-main-container">
                             <div className="pcoded-wrapper">
                                 <Leftsidebar />
-                                <div className="page-wrapper nft-user" style={{marginLeft:'216px'}}>
+                                <div className="page-wrapper nft-user" style={{ marginLeft: '216px' }}>
                                     <br />
                                     <ul className="nav nav-tabs">
                                         <li className={this.state.tabActive === 1 ? "active" : ''} ><a href="javascript:void(0)" onClick={this.tabClick.bind(this, 1)}>Detail</a></li>
@@ -575,44 +575,17 @@ export default class userDetails extends Component {
                                     </ul>
 
                                     <div className="row user-info-css" style={{ display: this.state.tabActive === 1 ? 'block' : 'none' }}>
-                                        <div className="col-sm-6">
-                                            <div className="row">
-                                                <div className="col-md-6 col-6">
-                                                    <p>Full Name:</p>
-                                                </div>
-                                                <div className="col-md-6 col-6">
-                                                    <p>{this.state.userDetailData?.full_name}</p>
-                                                </div>
+                                        <div className='col-md-6'>                                          
+                                                <div className="row">
+                                                    <div className="col-md-4 col-4">
+                                                        <p>Full Name:</p>
+                                                    </div>
+                                                    <div className="col-md-6 col-6">
+                                                        <p>{this.state.userDetailData?.full_name}</p>
+                                                    </div>
 
-                                            </div>
-
-                                        </div>
-                                        <div className="col-sm-6">
-                                            <div className="row">
-                                                <div className="col-md-6 col-6">
-                                                    <p>User Name:</p>
-                                                </div>
-                                                <div className="col-md-6 col-6">
-                                                    <p>{this.state.userDetailData?.user_name}</p>
-
-                                                </div>
-
-                                            </div>
-
-                                        </div>
-                                        <div className="col-sm-6">
-                                            <div className="row">
-                                                <div className="col-md-6 col-6">
-                                                    <p>Email:</p>
-                                                </div>
-                                                <div className="col-md-6 col-6">
-                                                    <p>{this.state.userDetailData?.email}</p>
-                                                </div>
-
-                                            </div>
-
-                                        </div>
-                                        <div className="col-sm-6">
+                                                </div>                               
+                                            {/* <div className="col-sm-6">
                                             <div className="row">
                                                 <div className="col-md-6 col-6">
                                                     <p>Email Verify:</p>
@@ -623,8 +596,8 @@ export default class userDetails extends Component {
 
                                             </div>
 
-                                        </div>
-                                        <div className="col-sm-6">
+                                        </div> */}
+                                            {/* <div className="col-sm-6">
                                             <div className="row">
                                                 <div className="col-md-6 col-6">
                                                     <p>Phone:</p>
@@ -635,8 +608,8 @@ export default class userDetails extends Component {
 
                                             </div>
 
-                                        </div>
-                                        {/* <div className="col-sm-6">
+                                        </div> */}
+                                            {/* <div className="col-sm-6">
                                             <div className="row">
                                                 <div className="col-md-6 col-6">
                                                     <p>Two Factor Status:</p>
@@ -648,68 +621,53 @@ export default class userDetails extends Component {
                                             </div>
 
                                         </div> */}
-                                        <div className="col-sm-12">
-                                            <div className="row">
-                                                <div className="col-md-3 col-3">
-                                                    <p>Social Icons:</p>
+                                                <div className="row">
+                                                    <div className="col-md-4 col-4">
+                                                        <p>Social Icons:</p>
+                                                    </div>
+                                                    <div className="col-md-6 col-6">
+                                                        <p className='circle-icon'>{this.state.userDetailData?.facebook === '' && this.state.userDetailData?.insta === '' && this.state.userDetailData?.telegram === '' && this.state.userDetailData?.twitter === '' && this.state.userDetailData?.discord === '' ? 'N/A' :
+
+                                                            this.state.userDetailData?.facebook ? <a href={this.state.userDetailData?.facebook} target="_blank"> <i className="fa fa-facebook-square" aria-hidden="true"></i>&nbsp;</a> : ''}
+                                                            {this.state.userDetailData?.insta ? <a href={this.state.userDetailData?.insta} target="_blank"> <i className="fa fa-instagram" aria-hidden="true"></i>&nbsp;</a> : ''}
+                                                            {this.state.userDetailData?.telegram ? <a href={this.state.userDetailData?.telegram} target="_blank"> <i className="fa fa-telegram" aria-hidden="true"></i>&nbsp;</a> : ''}
+                                                            {this.state.userDetailData?.twitter ? <a href={this.state.userDetailData?.twitter} target="_blank"> <i className="fa fa-twitter" aria-hidden="true"></i>&nbsp;</a> : ''}
+                                                            {this.state.userDetailData?.discord ? <a href={this.state.userDetailData?.discord} target="_blank">
+                                                                <span className="discord-img"><img src="images/discord2.png" /></span></a> : ''}
+                                                        </p>
+                                                    </div>
                                                 </div>
-                                                <div className="col-md-3 col-3">
-                                                    <p>{this.state.userDetailData?.facebook === '' && this.state.userDetailData?.insta === '' && this.state.userDetailData?.telegram === '' && this.state.userDetailData?.twitter === '' && this.state.userDetailData?.discord === '' ? 'N/A' :
+                                                <div className="row">
+                                                    <div className="col-md-4 col-4">
+                                                        <p>Profile Image:</p>
+                                                    </div>
+                                                    <div className="col-md-6 col-6">
+                                                        {this.state.userDetailData?.profile_pic ?
+                                                            <a href={`${config.imageUrl1}${this.state.userDetailData?.profile_pic}`} target="_blank">
+                                                                <p><img src={`${config.imageUrl1}${this.state.userDetailData?.profile_pic}`} style={{ width: "100px", height: "100px" }} /> </p>
+                                                            </a> : 'N/A'
+                                                        }
 
-                                                        this.state.userDetailData?.facebook ? <a href={this.state.userDetailData?.facebook} target="_blank"> <i className="fa fa-facebook-square" aria-hidden="true"></i>&nbsp;</a> : ''}
-                                                        {this.state.userDetailData?.insta ? <a href={this.state.userDetailData?.insta} target="_blank"> <i className="fa fa-instagram" aria-hidden="true"></i>&nbsp;</a> : ''}
-                                                        {this.state.userDetailData?.telegram ? <a href={this.state.userDetailData?.telegram} target="_blank"> <i className="fa fa-telegram" aria-hidden="true"></i>&nbsp;</a> : ''}
-                                                        {this.state.userDetailData?.twitter ? <a href={this.state.userDetailData?.twitter} target="_blank"> <i className="fa fa-twitter" aria-hidden="true"></i>&nbsp;</a> : ''}
-                                                        {this.state.userDetailData?.discord ? <a href={this.state.userDetailData?.discord} target="_blank">
-                                                            <span className="discord-img"><img src="images/discord.png" /></span></a> : ''}
-                                                    </p>
+                                                    </div>
                                                 </div>
-
-
                                             </div>
-
-                                        </div>
-
-
 
                                         <div className="col-sm-6">
-                                            <div className="row">
-                                                <div className="col-md-6 col-6">
-                                                    <p>Profile Image:</p>
-                                                </div>
-                                                <div className="col-md-6 col-6">
-                                                    {this.state.userDetailData?.profile_pic ?
-                                                        <a href={`${config.imageUrl1}${this.state.userDetailData?.profile_pic}`} target="_blank">
-                                                            <p><img src={`${config.imageUrl1}${this.state.userDetailData?.profile_pic}`} style={{ width: "100px", height: "100px" }} /> </p>
-                                                        </a> : 'N/A'
-                                                    }
-
-                                                </div>
-
+                                            <div className="col-md-4 col-4">
+                                                <p>Banner Image:</p>
                                             </div>
-
-                                        </div>
-
-                                        <div className="col-sm-6">
-                                            <div className="row">
-                                                <div className="col-md-6 col-6">
-                                                    <p>Banner Image:</p>
+                                            <div className="col-md-6 col-6">
+                                                <div className='bnr_img'>
+                                                {this.state.userDetailData?.banner ?
+                                                    <a href={`${config.imageUrl1}${this.state.userDetailData?.banner}`} target="_blank">
+                                                    <img src={`${config.imageUrl1}${this.state.userDetailData?.banner}`}  />
+                                                    </a> : 'N/A'}
                                                 </div>
-                                                <div className="col-md-6 col-6">
-                                                    {this.state.userDetailData?.banner ?
-                                                        <a href={`${config.imageUrl1}${this.state.userDetailData?.banner}`} target="_blank">
-                                                            <p><img src={`${config.imageUrl1}${this.state.userDetailData?.banner}`} style={{ width: "100px", height: "100px" }} /> </p>
-                                                        </a> : 'N/A'}
-
-                                                </div>
-
                                             </div>
-
                                         </div>
                                     </div>
-
                                     <br />
-                                    <div className="table-responsive" style={{ display: this.state.tabActive === 2 ? 'block' : 'none' }}>
+                                    <div className="table-responsive" style={{ display: this.state.tabActive === 2 ? 'block' : 'none'}}>
 
                                         <ReactDatatable
                                             config={this.config}

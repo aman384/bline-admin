@@ -42,7 +42,15 @@ export default class usercollection extends Component {
             {
                 key: "name",
                 text: "Name",
-                sortable: true
+                sortable: true,
+                cell: (item) => {
+                    return (
+                        <td nowrap="nowrap">
+                            <a target="_blank" href={`${config.redirectUrl}collections/${item.id}`}>{item.name}</a>
+                            
+                        </td>
+                    );
+                }
             },
 
 
@@ -112,41 +120,41 @@ export default class usercollection extends Component {
             },
             {
                 key: "is_featured",
-                text: "Featured",
-                sortable: true,
-                cell: (item) => {
-                    return (
-                        <>
-                        
-                        <input type='checkbox' checked={item.is_featured===0? '' : 'checked'} onClick={this.updateItemFeature.bind(this,item.id,item.is_featured)}  />
-                        </>
-                    )
-                }
-
-            },
-            {
-                key: "is_verified",
-                text: "Verified Tag",
+                text: "Trending",
                 sortable: true,
                 cell: (item) => {
                     return (
                         <>
 
-                            <input type='checkbox' checked={item.is_verified === 0 ? '' : 'checked'} onClick={this.updateUserCollectionTag.bind(this, item.id, item.is_verified)} />
+                            <input type='checkbox' checked={item.is_featured === 0 ? '' : 'checked'} onClick={this.updateItemFeature.bind(this, item.id, item.is_featured)} />
                         </>
                     )
                 }
 
             },
+            // {
+            //     key: "is_verified",
+            //     text: "Verified Tag",
+            //     sortable: true,
+            //     cell: (item) => {
+            //         return (
+            //             <>
+
+            //                 <input type='checkbox' checked={item.is_verified === 0 ? '' : 'checked'} onClick={this.updateUserCollectionTag.bind(this, item.id, item.is_verified)} />
+            //             </>
+            //         )
+            //     }
+
+            // },
             {
                 key: "website",
                 text: "Social Links",
                 cell: (item) => {
                     return (
                         <>
-                            <p>{item?.facebook === '' && item?.insta === '' && item?.telegram === '' && item?.twitter === '' && item?.discord === '' ? 'N/A' :
+                            <p className='circle-icon'>{item?.facebook === '' && item?.insta === '' && item?.telegram === '' && item?.twitter === '' && item?.discord === '' ? 'N/A' :
 
-                                item?.facebook ? <a href={item?.facebook} target="_blank"> <i className="fa fa-facebook-square" aria-hidden="true"></i>&nbsp;</a> : ''}
+                                item?.facebook ? <a href={item?.facebook} target="_blank"> <i className="fa fa-facebook" aria-hidden="true"></i>&nbsp;</a> : ''}
                                 {item?.instagram ? <a href={item?.instagram} target="_blank"> <i className="fa fa-instagram" aria-hidden="true"></i>&nbsp;</a> : ''}
                                 {item?.telegram ? <a href={item?.telegram} target="_blank"> <i className="fa fa-telegram" aria-hidden="true"></i>&nbsp;</a> : ''}
                                 {item?.twitter ? <a href={item?.twitter} target="_blank"> <i className="fa fa-twitter" aria-hidden="true"></i>&nbsp;</a> : ''}
@@ -176,7 +184,7 @@ export default class usercollection extends Component {
                     );
                 }
             },
-        
+
 
         ];
 
@@ -240,7 +248,7 @@ export default class usercollection extends Component {
                             method: 'post',
                             url: `${config.apiUrl}deleteUserCollection`,
                             headers: { "Authorization": this.loginData?.Token },
-                            data: { 'email': this.loginData?.data.user_email, collection_id: id.collection_id ,'is_admin':this.loginData.data.is_admin}
+                            data: { 'email': this.loginData?.data.user_email, collection_id: id.collection_id, 'is_admin': this.loginData.data.is_admin }
                         })
 
                             .then(result => {
@@ -275,7 +283,7 @@ export default class usercollection extends Component {
                 {
                     label: 'Yes',
                     onClick: () =>
-                        axios.post(`${config.apiUrl}deleteUserCollection`, { 'collection_id': id.id ,'is_admin':this.loginData.data.is_admin})
+                        axios.post(`${config.apiUrl}deleteUserCollection`, { 'collection_id': id.id, 'is_admin': this.loginData.data.is_admin })
                             .then(result => {
 
                                 if (result.data.success === true) {
@@ -301,7 +309,7 @@ export default class usercollection extends Component {
                                     position: toast.POSITION.TOP_CENTER
                                 });
 
-                             
+
                             })
                 },
                 {
@@ -310,7 +318,7 @@ export default class usercollection extends Component {
             ]
         });
     }
-   
+
 
     hideCollectionAPI(id) {
         confirmAlert({
@@ -324,7 +332,7 @@ export default class usercollection extends Component {
                             method: 'post',
                             url: `${config.apiUrl}hideCollection`,
                             headers: { "Authorization": this.loginData?.Token },
-                            data: { 'id': id.id ,'is_admin':this.loginData.data.is_admin}
+                            data: { 'id': id.id, 'is_admin': this.loginData.data.is_admin }
                         })
 
                             .then(result => {
@@ -358,9 +366,9 @@ export default class usercollection extends Component {
                             method: 'post',
                             url: `${config.apiUrl}showCollection`,
                             headers: { "Authorization": this.loginData?.Token },
-                            data: { 'id': id.id ,'is_admin':this.loginData.data.is_admin}
+                            data: { 'id': id.id, 'is_admin': this.loginData.data.is_admin }
                         })
-                      
+
                             .then(result => {
 
                                 toast.success(result.data.msg, {
@@ -379,25 +387,25 @@ export default class usercollection extends Component {
             ]
         });
     }
-    async updateItemFeature(user_id,featured){
+    async updateItemFeature(user_id, featured) {
         axios({
             method: 'post',
             url: `${config.apiUrl}addUserCollectionFeatured`,
             headers: { "Authorization": this.loginData?.Token },
-            data: {id:user_id,'is_admin':this.loginData.data.is_admin,is_featured:featured===0?'1':'0'}
+            data: { id: user_id, 'is_admin': this.loginData.data.is_admin, is_featured: featured === 0 ? '1' : '0' }
         })
             .then(result => {
                 if (result.data.success === true) {
-                  if(featured ==0){
-                    toast.success('Add in featured!!', {
-                        position: toast.POSITION.TOP_CENTER
-                    });
-                }
-                else if(featured ==1){
-                    toast.error('Remove in featured!!', {
-                        position: toast.POSITION.TOP_CENTER
-                    });
-                }
+                    if (featured == 0) {
+                        toast.success('Add in trending!!', {
+                            position: toast.POSITION.TOP_CENTER
+                        });
+                    }
+                    else if (featured == 1) {
+                        toast.error('Remove from trending!!', {
+                            position: toast.POSITION.TOP_CENTER
+                        });
+                    }
                     this.userCollection();
                 }
             }).catch(err => {
@@ -409,24 +417,24 @@ export default class usercollection extends Component {
     }
 
     async updateUserCollectionTag(id, verified) {
-        console.log('id',verified)
+        console.log('id', verified)
         axios({
             method: 'post',
             url: `${config.apiUrl}userCollectionVerifiedTag`,
             headers: { "Authorization": this.loginData?.Token },
-            data: { id: id,'is_admin':this.loginData.data.is_admin, is_verified: verified === 0 ? '1' : '0' }
+            data: { id: id, 'is_admin': this.loginData.data.is_admin, is_verified: verified === 0 ? '1' : '0' }
         })
             .then(result => {
 
                 if (result.data.success === true) {
 
                     if (verified == 0) {
-                        toast.success('Added in Verified Tag!!', {
+                        toast.success('Added in trending!!', {
                             position: toast.POSITION.TOP_CENTER
                         });
                     }
                     else if (verified == 1) {
-                        toast.error('Removed From Verified Tag!!', {
+                        toast.error('Removed from trending!!', {
                             position: toast.POSITION.TOP_CENTER
                         });
                     }
@@ -435,7 +443,7 @@ export default class usercollection extends Component {
 
                 }
             }).catch(err => {
-toast.error(err.response.data?.msg, {
+                toast.error(err.response.data?.msg, {
                     position: toast.POSITION.TOP_CENTER, autoClose: 1500
                 }, setTimeout(() => {
                 }, 500));

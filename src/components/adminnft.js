@@ -3,7 +3,7 @@ import Header from '../directives/header'
 import Leftsidebar from '../directives/leftsidebar'
 import Footer from '../directives/footer'
 import 'react-toastify/dist/ReactToastify.css';
-import toast, { Toaster } from 'react-hot-toast';
+// import toast, { Toaster } from 'react-hot-toast';
 import axios from 'axios'
 import config from '../config/config'
 import Cookies from 'js-cookie';
@@ -18,11 +18,13 @@ import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import moment from 'moment'
 import Web3 from 'web3';
-
+import { ToastContainer, toast } from 'react-toastify';
+import { Link } from 'react-router-dom';
 export default class adminnft extends Component {
     constructor(props) {
         super(props)
         this.loginData = (!Cookies.get('loginSuccessblineAdmin')) ? [] : JSON.parse(Cookies.get('loginSuccessblineAdmin'))
+        console.log(this.loginData);
         this.state = {
             item_id: '',
             name: '',
@@ -39,6 +41,7 @@ export default class adminnft extends Component {
             collection_id: '',
             user_id: '',
             is_sold: '',
+            imageData: "",
             expiry_date: '',
             start_date: '',
             sell_type: '',
@@ -54,9 +57,11 @@ export default class adminnft extends Component {
             gamesCategoryRes: [],
             ImageFileHash: '',
             isDialogOpen: false,
-      SingleCategoryData:[]
+            SingleCategoryData: [],
+            isPutonSale: 0,
+            isDialogOpen1: false
         }
-        
+
         this.editDataAPI = this.editDataAPI.bind(this);
         this.onChange = this.itemDetail.bind(this)
         this.updateItemData = this.updateItemData.bind(this)
@@ -81,11 +86,11 @@ export default class adminnft extends Component {
                     );
                 }
             },
-            {
-                key: "description",
-                text: "Description",
-                sortable: true
-            },
+            // {
+            //     key: "description",
+            //     text: "Description",
+            //     sortable: true
+            // },
 
             {
                 key: "image",
@@ -143,16 +148,33 @@ export default class adminnft extends Component {
                 cell: (item) => {
                     return (
                         <>
-                            <button type="submit" onClick={this.editDataAPI.bind(this, item)} data-toggle="modal" data-target="#responsive-modal2" className="btn-primary" data-original-title="Edit"> <i class="fa fa-pencil text-inverse m-r-10"></i> </button>&nbsp;
+                            {/* <button type="submit" onClick={this.editDataAPI.bind(this, item)} data-toggle="modal" data-target="#responsive-modal2" className="btn-primary" data-original-title="Edit"> <i class="fa fa-pencil text-inverse m-r-10"></i> </button>&nbsp; */}
                             {item.is_active == 1 ?
                                 <button type="submit" onClick={this.hideNFTAPI.bind(this, item)} data-toggle="tooltip" data-original-title="Close" className=" btn-primary"> <i class="fa fa-minus-square m-r-10"></i> </button> :
                                 <button type="submit" onClick={this.showNFTAPI.bind(this, item)} data-toggle="tooltip" data-original-title="Close" className=" btn-primary"> <i class="fa fa-plus-square m-r-10"></i> </button>
                             }&nbsp;
+                            {this.loginData?.id == item.owner_id ?
+                                item.is_on_sale == 1 ?
+                                    <div>
+                                        <a onClick={this.cancelOrder.bind(this, item)} className='putonsale' > Cancel Order </a>
+                                    </div>
+                                    :
+                                    <>
+                                        <div>
+
+                                            <Link style={{ padding: '5px' }} to={`${config.baseUrl}editNft/` + item.id} className="btn-primary"><i class="fa fa-pencil text-inverse m-r-10"></i></Link>&nbsp;
+                                            <a onClick={this.putOnSaleModelAPI.bind(this, item, 1)} className='putonsale' data-toggle="modal" data-target="#putOnSale"> Put on sale </a>
+
+                                        </div>
+                                    </>
+                                : ""}
                             {item.sell_type == 2 ?
-                                <button
+                                <button style={{ marginTop: '5px' }}
                                     type='button' onClick={this.getBidDetailAPI.bind(this, item)} data-toggle="modal" data-target="#exampleModalCenter" className="btn-primary">
                                     View Bid</button> : ''
                             }
+
+
                         </>
                     );
                 }
@@ -198,21 +220,21 @@ export default class adminnft extends Component {
     }
 
 
-     //=============================================  Single category get  ============================
+    //=============================================  Single category get  ============================
 
-  async singleGamesCategoryAPI(id) {
-    await axios({
-      method: 'post',
-      url: `${config.apiUrl}singleGamesCategory`,
-      data: { "category_id": id }
-    }).then(response => {
-      if (response.data.success === true) {
-        this.setState({
-          SingleCategoryData: response.data.response
+    async singleGamesCategoryAPI(id) {
+        await axios({
+            method: 'post',
+            url: `${config.apiUrl}singleGamesCategory`,
+            data: { "category_id": id }
+        }).then(response => {
+            if (response.data.success === true) {
+                this.setState({
+                    SingleCategoryData: response.data.response
+                })
+            }
         })
-      }
-    })
-  }
+    }
 
     closeModal(e) {
         this.setState({
@@ -309,6 +331,49 @@ export default class adminnft extends Component {
             })
     }
 
+
+    async putOnSaleModelAPI(item, type) {
+        console.log(item);
+        this.setState({
+            isPutonSale: 1,
+            updateType: type
+        })
+
+        $("#nft" + item.item_id).css({ "display": "none" });
+        await axios({
+            method: 'post',
+            url: `${config.apiUrl}itemDetail`,
+            data: { 'item_id': item.id, 'user_id': this.loginData.id }
+        }).then(response => {
+            if (response.data.success === true) {
+                this.setState({
+                    nftData: response.data.response
+                })
+            }
+        })
+    }
+
+
+    async cancelOrder(item) {
+        this.setState({
+            isCancelOrder: 1
+        })
+        confirmAlert({
+            title: 'Confirm to submit',
+            message: 'Are you sure want to cancel this order?.',
+            buttons: [
+                {
+                    label: 'Yes',
+                    onClick: () =>
+                        this.approveNFT(item)
+                },
+                {
+                    label: 'No',
+                }
+            ]
+        });
+    }
+
     async BidAcceptAPI(itemData) {
         console.log(itemData);
         let tokenId = itemData.token_id;
@@ -317,7 +382,7 @@ export default class adminnft extends Component {
             const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
             let web3 = new Web3(window.ethereum);
 
-            var chainId = '0x3';
+            var chainId = '0x4';
 
             try {
                 this.setState({
@@ -452,15 +517,15 @@ export default class adminnft extends Component {
         }
 
         if (e.target.name == 'item_category_id') {
-           
+
             this.singleGamesCategoryAPI(e.target.value)
-          }
+        }
     }
 
     handleEditImagePreview = (e) => {
         let image_as_base64 = URL.createObjectURL(e.target.files[0])
         let image_as_files = e.target.files[0];
-        
+
         let file_name = e.target.files[0].name
         let file_type = '';
         if (image_as_files.type.indexOf('image') === 0) {
@@ -518,16 +583,16 @@ export default class adminnft extends Component {
             method: 'post',
             url: `${config.apiUrl}createMetadata`,
             data: {
-                "name": this.state.name,
+                "name": this.state.item_name,
                 "description": this.state.description,
                 "image": `https://meme.mypinata.cloud/ipfs/${this.state.ImageFileHash}`
             }
         });
-        let ipfsImg = resIPF.data.hash.IpfsHash;
+        let tokenId = resIPF.data.tokenId;
         this.setState({
-            MetadataFileHash: ipfsImg
+            token_id: tokenId
         })
-        return ipfsImg;
+        return tokenId;
 
     }
 
@@ -589,16 +654,16 @@ export default class adminnft extends Component {
                 web3 = new Web3(window.ethereum);
                 const accounts = await web3.eth.getAccounts();
                 let currentNetwork = await web3.currentProvider.chainId;
-                
+
                 web3.eth.defaultAccount = accounts[0];
 
                 // var ETH_mainnet = 0x1;
-                // var ETH_testnet = 0x3;
+                // var ETH_testnet = 0x4;
 
                 // let ETH_mainnet = 137;
                 // let ETH_testnet = 80001;
                 if (this.state.blockchainType == 1) {
-                    if (currentNetwork !== '0x3') {
+                    if (currentNetwork !== '0x4') {
                         toast.error('Please select ETH Network!!');
                         this.setState({
                             spinLoader: '0',
@@ -606,7 +671,7 @@ export default class adminnft extends Component {
                         })
                         return false;
                     }
-                    var chainId = '0x3';
+                    var chainId = '0x4';
                 }
 
                 if (this.state.blockchainType == 2) {
@@ -730,28 +795,92 @@ export default class adminnft extends Component {
     }
 
     async approveNFT(itemDetails) {
-        let tokenId = itemDetails.tokenId;
+        console.log('itemDetails', itemDetails);
+        this.setState({
+            spinLoader: '1',
+            isPutonSale: 0,
+            isDialogOpen1: true
+        })
+
         if (window.ethereum) {
-            let web3 = new Web3(window.ethereum);
-            let currentNetwork = web3.currentProvider.chainId;
+
+            var web3 = '';
+            web3 = new Web3(window.ethereum);
+            const accounts = await web3.eth.getAccounts();
+            let currentNetwork = await web3.currentProvider.chainId;
+            web3.eth.defaultAccount = accounts[0];
+
             // var ETH_mainnet = 0x1;
-            // var ETH_testnet = 0x3;
+            // var ETH_testnet = 0x4;
 
-            if (currentNetwork !== '0x3') {
+            // let matic_mainnet = 137;
+            // let matic_testnet = 80001;
 
-                toast.error('Please select ETH Network!!');
-                this.setState({
-                    spinLoader: '0'
-                })
-                return false;
+            console.log('currentNetwork', currentNetwork);
+            if (itemDetails.blockchainType == 1) {
+                if (currentNetwork !== '0x4') {
+                    toast.error('Please select ETH smartchain!!');
+                    this.setState({
+                        spinLoader: '0',
+                        isPutonSale: 1,
+                        isDialogOpen1: false
+                    })
+                    return false;
+                }
+                var chainId = '0x4';
             }
-            var chainId = '0x3';
-            try {
 
-                let contractAddress = `${config.contract}`
-                let from_address = itemDetails.from_address;
-                const contract = await new web3.eth.Contract(config.abi, contractAddress);
-                let tx_builder = await contract.methods.approve(config.marketplaceContract, tokenId.toString());
+            if (itemDetails.blockchainType == 2) {
+                this.setState({
+                    spinLoader: '0',
+                    isPutonSale: 1,
+                    isDialogOpen1: false
+                })
+                toast.error('In Progress');
+                return;
+            }
+
+            try {
+                let mintFee = 0;
+                let SalePrice;
+                let start_date = 0;
+                let expiry_date = 0;
+                let tokenId = itemDetails.token_id;
+                if (itemDetails.sell_type == 1) {
+                    SalePrice = parseInt(parseFloat(itemDetails.price) * (10 ** 18)).toString()
+                    this.setState({
+                        start_date: 0,
+                        expiry_date: 0
+                    })
+                }
+
+                else if (itemDetails.sell_type == 2) {
+                    SalePrice = parseInt(parseFloat(itemDetails.price) * (10 ** 18)).toString();
+                    start_date = Math.round(new Date(itemDetails.start_date).getTime() / 1000);
+                    expiry_date = Math.round(new Date(itemDetails.expiry_date).getTime() / 1000);
+                }
+
+                let contractAddress = `${config.marketplaceContract}`
+                let from_address = accounts[0];
+                const contract = await new web3.eth.Contract(config.abiMarketplace, contractAddress);
+                console.log(tokenId)
+                if (this.state.isCancelOrder == 1) {
+                    await contract.methods.cancelOrder(tokenId.toString()).call();
+                    var tx_builder = await contract.methods.cancelOrder(tokenId.toString());
+                } else {
+                    if (itemDetails.is_minted == 1) {
+                        await contract.methods.updateDetails(tokenId.toString(), SalePrice.toString(), itemDetails.sell_type.toString(), start_date.toString(), expiry_date.toString()).call();
+
+                        var tx_builder = await contract.methods.updateDetails(tokenId.toString(), SalePrice.toString(), itemDetails.sell_type.toString(), start_date.toString(), expiry_date.toString());
+                    } else {
+
+                        console.log(tokenId.toString(), SalePrice.toString(), (itemDetails.royalty_percent * 100).toString(), itemDetails.sell_type.toString(), start_date.toString(), expiry_date.toString());
+
+                        await contract.methods._mint(tokenId.toString(), SalePrice.toString(), (itemDetails.royalty_percent * 100).toString(), itemDetails.sell_type.toString(), start_date.toString(), expiry_date.toString()).call();
+
+                        var tx_builder = await contract.methods._mint(tokenId.toString(), SalePrice.toString(), (itemDetails.royalty_percent * 100).toString(), itemDetails.sell_type.toString(), start_date.toString(), expiry_date.toString());
+                    }
+                }
 
                 let encoded_tx = tx_builder.encodeABI();
                 let gasPrice = await web3.eth.getGasPrice();
@@ -761,44 +890,108 @@ export default class adminnft extends Component {
                     gasPrice: web3.utils.toHex(gasPrice),
                     to: contractAddress,
                     from: from_address,
+                    value: web3.utils.toHex(mintFee),
                     chainId: chainId,
                     data: encoded_tx
                 });
+
+                // const txData = await web3.currentProvider.request({
+                //     method: 'eth_sendTransaction',
+                //     params: [{
+                //         gasPrice: web3.utils.toHex(gasPrice),
+                //         gas: web3.utils.toHex(gasLimit),
+                //         to: contractAddress,
+                //         from: from_address,
+                //         value: web3.utils.toHex(mintFee),
+                //         chainId: chainId,
+                //         data: encoded_tx
+                //     }],
+                // });
 
                 const txData = await web3.eth.sendTransaction({
                     gasPrice: web3.utils.toHex(gasPrice),
                     gas: web3.utils.toHex(gasLimit),
                     to: contractAddress,
                     from: from_address,
+                    value: web3.utils.toHex(mintFee),
                     chainId: chainId,
                     data: encoded_tx
                 });
 
                 if (txData.transactionHash) {
 
-                    
+                    const token = this.token
+                    await axios({
+                        method: 'post',
+                        url: this.state.isCancelOrder ? `${config.apiUrl}cancelOrder` : `${config.apiUrl}putOnSale`,
+                        headers: { authorization: token },
+                        data: {
+                            "user_id": this.loginData.data.id,
+                            "address": from_address,
+                            "item_id": this.state.isCancelOrder ? itemDetails.id : this.state.nftData.item_id,
+                            "token_hash": txData.transactionHash,
+                            "is_minted": itemDetails.is_minted
+                        }
+                    }).then((res) => {
+                        if (res.data.success === true) {
 
-                    return true
+
+                            toast.success(res.data.msg);
+                            this.setState({
+                                isDialogOpen1: false
+                            })
+
+                            // this.modalShow(0)
+                            // this.getMyNftAPI(itemDetails.nftType)
+                            //    toast.error('Please select start date');
+                            // toast.success(res.data.msg, {
+                            //     position: toast.POSITION.TOP_CENTER
+                            // });
+                        } else {
+                            toast.error(res.data.msg);
+                            // toast.error(res.data.msg, {
+                            //     position: toast.POSITION.TOP_CENTER
+                            // });
+                        }
+                    }).catch((error) => {
+                        toast.error(error.response?.data?.msg, {});
+                    })
                 } else {
                     toast.error('Something went wrong please try again.');
                     this.setState({
-                        spinLoader: '0'
+                        spinLoader: '0',
+                        isPutonSale: this.state.this.state.isCancelOrder == 1 ? 0 : 1,
+                        isDialogOpen1: false
                     })
                     return false;
                 }
 
-            } catch (error) {
+            } catch (err) {
 
-                toast.error('Something went wrong please try again.');
+                if (err.message.toString().split('insufficient funds')[1]) {
+                    toast.error('Transaction reverted : ' + err.message)
+                } else {
+                    if (err.toString().split('execution reverted:')[1]) {
+                        toast.error('Transaction reverted : ' + (err.toString().split('execution reverted:')[1]).toString().split('{')[0])
+
+                    } else {
+                        toast.error(err.message);
+                    }
+                }
+
                 this.setState({
-                    spinLoader: '0'
+                    spinLoader: '0',
+                    isPutonSale: this.state.isCancelOrder == 1 ? 0 : 1,
+                    isDialogOpen1: false
                 })
                 return false;
             }
         } else {
             toast.error('Please Connect to MetaMask.');
             this.setState({
-                spinLoader: '0'
+                spinLoader: '0',
+                isPutonSale: this.state.isCancelOrder == 1 ? 0 : 1,
+                isDialogOpen1: false
             })
             return false;
         }
@@ -806,70 +999,111 @@ export default class adminnft extends Component {
 
     async API(mintRes) {
 
-        var approveNFTRes = await this.approveNFT(mintRes);
-        if (approveNFTRes) {
-            let formData = new FormData();
-            formData.append('price', this.state.price);
-            formData.append('image', mintRes.ImageFileHash);
-            formData.append('metadata', mintRes.MetadataFileHash);
-            formData.append('name', this.state.item_name);
-            formData.append('file_type', this.state.file_type);
-            formData.append('royalty_percent', this.state.royaltie);
-            formData.append('image_type', this.state.image_type);
-            formData.append('description', this.state.description);
-            formData.append('start_date', this.state.start_date);
-            formData.append('expiry_date', this.state.expiry_date);
-            formData.append('item_category_id', this.state.item_category_id);
-            formData.append('user_collection_id', this.state.user_collection_id);
-            formData.append('sell_type', this.state.sell_type);
-            formData.append('user_id', this.loginData?.data?.id);
-            formData.append('email', this.loginData?.data?.user_email);
-            formData.append('owner_address', mintRes?.from_address);
-            formData.append('blockchainType', this.state.blockchainType);
-            formData.append('hash', mintRes.hash);
-            formData.append('tokenId', mintRes.tokenId);
-            formData.append('minting_fee', mintRes.minting_fee);
-            formData.append('item_subcategory_id', this.state.item_subcategory_id);   
+        // var approveNFTRes = await this.approveNFT(mintRes);
+        // if (approveNFTRes) {
 
-
-            axios.post(`${config.apiUrl}addNftByUser`, formData)
-                .then(result => {
-
-                    this.setState({
-                        spinLoader: '0',
-                        isDialogOpen: false
-                    })
-
-                    if (result.data.success === true) {
-                        toast.success(result.data.msg);
-                        setTimeout(() => {
-                            window.location.href = `${config.baseUrl}adminnft`
-                        }, 2000);
-                    } else {
-                        toast.error(result.data.msg);
-                        this.setState({
-                            spinLoader: '0',
-                            isDialogOpen: false
-                        })
-                    }
-                }).catch(err => {
-                    toast.error(err.response.data?.msg,
-
-                    );
-                    this.setState({
-                        spinLoader: '0',
-                        isDialogOpen: false
-                    })
-                })
-        } else {
-            this.setState({
-                spinLoader: '0'
-            })
+        if (this.state.item_name == '') {
+            toast.error('Item name required');
         }
+        else if (this.state.description == '') {
+            toast.error('Item description required');
+        }
+        else if (!this.state.image_file) {
+            toast.error('Item image required');
+        }
+        else if (!this.state.item_category_id) {
+            toast.error('Please select category');
+        }
+        else if (!this.state.user_collection_id) {
+            toast.error('Please select collection');
+        }
+        else if (this.state.sell_type == 2 && !this.state.start_date) {
+            toast.error('Please select start date');
+        }
+        else if (this.state.sell_type == 2 && !this.state.expiry_date) {
+            toast.error('Please select end date');
+        }
+        else if (this.state.price == '') {
+            toast.error('Item price required');
+        }
+        else if (this.state.blockchainType == '') {
+            toast.error('Blockchain type required');
+        }
+        this.setState({
+            spinLoader: '1',
+        })
+        let formData = new FormData();
+        let ImageFileHash = this.state.ImageFileHash;
+        if (!ImageFileHash) {
+            ImageFileHash = await this.imageUpload();
+        }
+        let token_id = this.state.token_id;
+        if (!token_id) {
+            token_id = await this.metaDataUpload();
+        }
+        formData.append('price', this.state.price);
+        formData.append('image', this.state.ImageFileHash);
+        formData.append('metadata', this.state.MetadataFileHash);
+        formData.append('name', this.state.item_name);
+        formData.append('file_type', this.state.file_type);
+        formData.append('royalty_percent', this.state.royaltie);
+        formData.append('image_type', this.state.image_type);
+        formData.append('description', this.state.description);
+        formData.append('start_date', this.state.start_date);
+        formData.append('expiry_date', this.state.expiry_date);
+        formData.append('item_category_id', this.state.item_category_id);
+        formData.append('user_collection_id', this.state.user_collection_id);
+        formData.append('sell_type', this.state.sell_type);
+        formData.append('user_id', this.loginData?.data?.id);
+        formData.append('email', this.loginData?.data?.user_email);
+        formData.append('owner_address', this.state?.from_address);
+        formData.append('blockchainType', this.state.blockchainType);
+        formData.append('hash', this.state.hash);
+        formData.append('tokenId', this.state.token_id);
+        formData.append('minting_fee', this.state.minting_fee);
+        formData.append('item_subcategory_id', this.state.item_subcategory_id);
+        this.setState({
+            imageData: this.state.ImageFileHash
+        })
+
+        axios.post(`${config.apiUrl}addNftByUser`, formData)
+            .then(result => {
+
+
+
+                if (result.data.success === true) {
+                    this.setState({
+                        spinLoader: '0',
+                        isDialogOpen: true
+                    })
+                    // setTimeout(() => {
+                    //     window.location.href = `${config.baseUrl}adminnft`
+                    // }, 2000);
+                } else {
+                    toast.error(result.data.msg);
+                    this.setState({
+                        spinLoader: '0',
+                        isDialogOpen: false
+                    })
+                }
+            }).catch(err => {
+                toast.error(err.response.data?.msg,
+
+                );
+                this.setState({
+                    spinLoader: '0',
+                    isDialogOpen: false
+                })
+            })
+        // } else {
+        //     this.setState({
+        //         spinLoader: '0'
+        //     })
+        // }
     }
 
     handleChangeStart = (date, name) => {
-        
+
         this.setState(prevState => ({
             getItemData: { ...prevState.getItemData, [name]: moment(date).format('YYYY-MM-DD') }
         }))
@@ -907,7 +1141,7 @@ export default class adminnft extends Component {
     }
 
     async editDataAPI(nftData) {
-        
+        console.log(nftData);
         this.setState({
             item_category_id: nftData.item_category_id,
             price: nftData.price,
@@ -915,14 +1149,14 @@ export default class adminnft extends Component {
             user_collection_id: nftData.user_collection_id,
             name: nftData.name,
             is_banner: nftData.is_banner,
-            is_trending: nftData.is_trending,
+            is_featured: nftData.is_featured,
             is_on_sale: nftData.is_on_sale
         })
     }
 
     async updateItemData(e) {
         e.preventDefault()
-        
+        console.log(this.state.is_featured);
         this.setState({
             loader: '1'
         })
@@ -947,7 +1181,7 @@ export default class adminnft extends Component {
                 method: 'post',
                 url: `${config.apiUrl}updateitem`,
                 headers: { "Authorization": this.loginData?.Token },
-                data: { 'email': this.loginData?.data.user_email, 'item_id': this.state.item_id, 'item_category_id': this.state.item_category_id, 'name': this.state.name, 'price': this.state.price, 'user_collection_id': this.state.user_collection_id, 'is_banner': this.state.is_banner, 'is_trending': this.state.is_trending, 'is_on_sale': this.state.is_on_sale }
+                data: { 'email': this.loginData?.data.user_email, 'item_id': this.state.item_id, 'item_category_id': this.state.item_category_id, 'name': this.state.name, 'price': this.state.price, 'user_collection_id': this.state.user_collection_id, 'is_banner': this.state.is_banner, 'is_featured': this.state.is_featured, 'is_on_sale': this.state.is_on_sale }
             }).then(result => {
                 if (result.data.success === true) {
                     this.setState({
@@ -1030,7 +1264,7 @@ export default class adminnft extends Component {
         });
     }
     async updateAdminNftFeature(id, featured) {
-        
+
         axios({
             method: 'post',
             url: `${config.apiUrl}addAdminNftFeatured`,
@@ -1060,7 +1294,7 @@ export default class adminnft extends Component {
     }
 
     async addOnSale(id, featured) {
-        
+
         axios({
             method: 'post',
             url: `${config.apiUrl}addOnSale`,
@@ -1092,7 +1326,7 @@ export default class adminnft extends Component {
 
         $('#mintId' + nftData.id).text('Processing...');
         $("#mintId" + nftData.id).prop("disabled", true);
-        
+
         const token = this.token
         var localImage = './uploads/' + nftData.folder_name + '/' + nftData.local_image
         confirmAlert({
@@ -1138,11 +1372,31 @@ export default class adminnft extends Component {
         this.setState({ attributes: rows })
     }
 
+    movePage() {
+        window.location.href = `${config.baseUrl}adminnft`
+    }
+
+    modalShow(id) {
+        if (id === 1) {
+            this.setState({
+                isSocial: 1,
+                isPutonSale: 1,
+                isTransferNft: 1
+            })
+        }
+        else if (id === 0) {
+            this.setState({
+                isSocial: 0,
+                isPutonSale: 0,
+                isTransferNft: 0
+            })
+        }
+    }
+
     render() {
-        
+
         return (
             <>
-                <Toaster />
                 <div className="wrapper theme-6-active pimary-color-green">
 
                     <Header />
@@ -1150,6 +1404,7 @@ export default class adminnft extends Component {
                     <Leftsidebar />
 
                     <div className="right-sidebar-backdrop"></div>
+                    <ToastContainer />
 
                     <div className="page-wrapper nft-user">
                         <div className="container-fluid pt-25">
@@ -1162,22 +1417,52 @@ export default class adminnft extends Component {
                             <div className="row">
                                 <div className="col-sm-12">
                                     <Dialog
-                                        title="Warning"
-                                        icon="warning-sign"
+                                        title={`You Created-${this.state.item_name}`}
+                                        // icon="warning-sign"
                                         style={{
-                                            color: 'red'
+                                            color: '#3fa1f3',
+                                            textAlign: "center"
                                         }}
                                         isOpen={this.state.isDialogOpen}
                                         isCloseButtonShown={false}
                                     >
-                                        <div className="text-center">
-                                            <BarLoader color="#e84747" height="2" />
+                                        <div className="text-center pl-3 pr-3">
+                                            {/* <BarLoader color="#e84747" height="2" /> */}
                                             <br />
-                                            <h4 style={{ color: '#000' }}>Transaction under process...</h4>
-                                            <p style={{ color: 'red' }}>
+                                            <h4 style={{ color: '#3fa1f3', fontSize: '16px' }}>To get set up for selling on marketplace, please put the item on sale</h4>
+                                            {/* <p style={{ color: '#091f3f' }}>
+              Please do not refresh page or close tab.
+            </p> */}
+                                            <div className='mb-3'>
+                                                <img src={`${config.imageUrl + this.state.imageData}`} width="150px" />
+                                            </div>
+                                            <button type='button' className='btn btn-primary' onClick={this.movePage.bind(this)}>Ok</button>
+                                            {/* <div>
+              <div class="spinner-border"></div>
+            </div> */}
+                                        </div>
+                                    </Dialog>
+
+
+                                    <Dialog
+                                        title="Please Wait..."
+                                        // icon="warning-sign"
+                                        style={{
+                                            color: '#3fa1f3',
+                                            textAlign: "center"
+                                        }}
+                                        isOpen={this.state.isDialogOpen1}
+                                        isCloseButtonShown={false}
+                                    >
+                                        <div className="text-center pl-3 pr-3">
+                                            {/* <BarLoader color="#e84747" height="2" /> */}
+                                            <br />
+                                            <h4 style={{ color: '#3fa1f3', fontSize: '16px' }}>To get set up for selling on Bline, you must approve this item for sale and listing.</h4>
+                                            <p style={{ color: '#091f3f' }}>
                                                 Please do not refresh page or close tab.
                                             </p>
                                             <div>
+                                                <div className="spinner-border"></div>
                                             </div>
                                         </div>
                                     </Dialog>
@@ -1226,13 +1511,13 @@ export default class adminnft extends Component {
                                                         <div className="col-md-6">
                                                             <div className="form-group">
                                                                 <label className="control-label mb-10">Item Name</label>
-                                                                <input type="text" onChange={this.handleChange1} name="item_name" className="form-control" placeholder="Item Name" value={this.state.item_name} />
+                                                                <input type="text" onChange={this.handleChange1} name="item_name" className="form-control" placeholder="Item Name" value={this.state.item_name} maxLength="45" />
                                                             </div>
                                                         </div>
                                                         <div className="col-md-6">
                                                             <div className="form-group">
                                                                 <label className="control-label mb-10">Description</label>
-                                                                <input type="text" onChange={this.handleChange1} name="description" className="form-control" placeholder="Description" value={this.state.description} />
+                                                                <input type="text" onChange={this.handleChange1} name="description" className="form-control" placeholder="Description" value={this.state.description} maxLength="300" />
                                                             </div>
                                                         </div>
                                                         <div className="col-md-6">
@@ -1249,10 +1534,10 @@ export default class adminnft extends Component {
                                                         </div> */}
                                                         <div className="col-md-6">
                                                             <div className="form-group">
-                                                                <label className="control-label mb-10">Select Category</label>
+                                                                <label className="control-label mb-10">Select Games Category</label>
                                                                 <div className="customSelectHolder">
                                                                     <select name="item_category_id" onChange={this.handleChange1} value={this.state.item_category_id} class="form-control basic">
-                                                                        <option selected="selected" value="">Select Category</option>
+                                                                        <option selected="selected" value="">Select Games Category</option>
                                                                         {this.state.category_list.map(item => (
                                                                             <option value={item.id}>{item.name}</option>
                                                                         ))}
@@ -1263,10 +1548,10 @@ export default class adminnft extends Component {
 
                                                         <div className="col-md-6">
                                                             <div className="form-group">
-                                                                <label className="control-label mb-10">Select Sub Categories</label>
+                                                                <label className="control-label mb-10">Select Games</label>
                                                                 <div className="customSelectHolder">
                                                                     <select name="item_subcategory_id" onChange={this.handleChange1} value={this.state.item_subcategory_id} class="form-control basic">
-                                                                        <option selected="selected" value="">Select Sub Category</option>
+                                                                        <option selected="selected" value="">Select Games</option>
                                                                         {this.state.SingleCategoryData.map(item => (
                                                                             <option value={item.id}>{item.name}</option>
                                                                         ))}
@@ -1289,12 +1574,7 @@ export default class adminnft extends Component {
                                                             </div>
                                                         </div>
 
-                                                        <div className="col-md-6">
-                                                            <div className="form-group">
-                                                                <label className="control-label mb-10">Fixed price(In Crypto)</label>
-                                                                <input type="text" onKeyPress={(event) => { if (!/^\d*[.]?\d{0,1}$/.test(event.key)) { event.preventDefault(); } }} onChange={this.handleChange1} name="price" className="form-control" placeholder="Price" value={this.state.price} />
-                                                            </div>
-                                                        </div>
+
 
                                                         <div className="col-md-6">
                                                             <div className="form-group">
@@ -1311,6 +1591,13 @@ export default class adminnft extends Component {
                                                                     </select>
 
                                                                 </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div className="col-md-6">
+                                                            <div className="form-group">
+                                                                <label className="control-label mb-10">Price(In Crypto)</label>
+                                                                <input type="text" onKeyPress={(event) => { if (!/^\d*[.]?\d{0,1}$/.test(event.key)) { event.preventDefault(); } }} onChange={this.handleChange1} name="price" className="form-control" placeholder="Price" value={this.state.price} />
                                                             </div>
                                                         </div>
 
@@ -1360,7 +1647,7 @@ export default class adminnft extends Component {
                                             <button type="button" class="btn btn-default" onClick={e => this.closeModal(e)} data-dismiss="modal">Close</button>
 
                                             {this.state.spinLoader == 0 ?
-                                                <button type='submit' onClick={this.createUserNft.bind(this)} className="btn btn-primary">Add </button>
+                                                <button type='submit' onClick={this.API.bind(this)} className="btn btn-primary">Add </button>
                                                 :
                                                 <button type='submit' disabled className="btn btn-primary">Loading... </button>
                                             }
@@ -1381,10 +1668,10 @@ export default class adminnft extends Component {
                                                     <div className="row">
                                                         <div className="col-md-12">
                                                             <div className="form-group">
-                                                                <label className="control-label mb-10">Select Category</label>
+                                                                <label className="control-label mb-10">Select Games Category</label>
                                                                 <div className="customSelectHolder">
                                                                     <select name="item_category_id" onChange={this.handleChange1} value={this.state.item_category_id} class="form-control  basic">
-                                                                        <option selected="selected" value="">Select Category</option>
+                                                                        <option selected="selected" value="">Select Games Category</option>
                                                                         {this.state.category_list.map(item => (
                                                                             <option value={item.id}>{item.name}</option>
                                                                         ))}
@@ -1392,12 +1679,12 @@ export default class adminnft extends Component {
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div className="col-md-12">
+                                                        {/* <div className="col-md-12">
                                                             <div className="form-group">
                                                                 <label className="control-label mb-10">Fixed price (In Crypto)</label>
                                                                 <input type="text" onChange={this.handleChange1} name="price" className="form-control" onKeyPress={(event) => { if (!/^\d*[.]?\d{0,1}$/.test(event.key)) { event.preventDefault(); } }} placeholder="Price" value={this.state.price} />
                                                             </div>
-                                                        </div>
+                                                        </div> */}
 
                                                         <div className="col-md-12">
                                                             <div className="form-group">
@@ -1406,7 +1693,7 @@ export default class adminnft extends Component {
 
                                                                     <select onChange={this.handleChange1} name='user_collection_id' value={this.state.user_collection_id} className="form-control" >
                                                                         <option value="">Select Collection</option>
-                                                                        {this.state.item_list1.map((item) => (
+                                                                        {this.state.admin_collection_list.map((item) => (
                                                                             <option value={item.id}>{item.name}</option>
                                                                         ))}
                                                                     </select>
@@ -1419,7 +1706,7 @@ export default class adminnft extends Component {
                                                                 <label className="control-label mb-10">Trending Status</label>
                                                                 <div className="customSelectHolder">
 
-                                                                    <select onChange={this.handleChange1} name='is_trending' value={this.state.is_trending} className="form-control" >
+                                                                    <select onChange={this.handleChange1} name='is_featured' value={this.state.is_featured} className="form-control" >
                                                                         <option value="1">Yes</option>
                                                                         <option value="0">No</option>
                                                                     </select>
@@ -1490,14 +1777,14 @@ export default class adminnft extends Component {
                                                         this.state.bid_list.map(item => (
                                                             <tr>
 
-                                                                <td> {item.user_name == null || item.user_name === '' || item.user_name === undefined 
-                             ? 
-                             <a style={{ cursor: 'pointer' }} onClick={e => window.open(`https:/ropsten.etherscan.io/address/${item.address}`)} target="_blank" >
-                             <p title={item.address}>{item.address == null ? '' : item.address.toString().substring(0, 8) + '...' + item.address.toString().substr(item.address.length - 8)}</p>
-                         </a>
-                             
-                             :
-                             item.user_name }   </td>
+                                                                <td> {item.user_name == null || item.user_name === '' || item.user_name === undefined
+                                                                    ?
+                                                                    <a style={{ cursor: 'pointer' }} onClick={e => window.open(`https:/ropsten.etherscan.io/address/${item.address}`)} target="_blank" >
+                                                                        <p title={item.address}>{item.address == null ? '' : item.address.toString().substring(0, 8) + '...' + item.address.toString().substr(item.address.length - 8)}</p>
+                                                                    </a>
+
+                                                                    :
+                                                                    item.user_name}   </td>
                                                                 <td >
                                                                     {item.profile_pic === null || item.profile_pic === '' || item.profile_pic === undefined
                                                                         ?
@@ -1522,6 +1809,70 @@ export default class adminnft extends Component {
                         </div>
 
                         <Footer />
+                    </div>
+                </div>
+
+                <div className={this.state.isPutonSale === 0 ? "modal fade" : "modal fade show"} id="putOnSale" style={{ display: this.state.isPutonSale === 0 ? 'none' : 'block' }} tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="false">
+                    <div className="modal-dialog" role="document">
+
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h5 className="modal-title" id="exampleModalLabel"> Put On Sale </h5>
+                                <a type="button" className="close" data-dismiss="modal" style={{
+                                    fontSize: '26px', marginTop: '-30px'
+                                }} aria-label="Close" onClick={this.modalShow.bind(this, 0)} >
+                                    <span aria-hidden="true">&times;</span>
+                                </a>
+                            </div>
+
+                            <div className="modal-body">
+                                <div className="spacer-10" />
+                                <div className="de_tab tab_methods">
+                                    <div className="de_tab_content">
+                                        {console.log(this.state.nftData)}
+                                        {this.state.nftData?.sell_type === 1 ?
+                                            <>
+                                                <h5>NFT Type : Price</h5>
+                                                <h5>Price</h5>
+                                                <input type="text" disabled value={this.state.nftData?.price} name="price" id="item_price_bid" className="form-control" placeholder="Enter Price" />
+                                            </>
+                                            :
+                                            this.state.nftData?.sell_type === 2 ?
+                                                <>
+                                                    <h5>NFT Type : Auction</h5>
+                                                    <h5>Minimum bid</h5>
+                                                    <input type="text" name="minimum_bid_amount" disabled value={this.state.nftData?.price} id="item_price_bid" className="form-control" placeholder="Enter Minimum Bid" />
+                                                    <div className="spacer-10" />
+                                                    <div className="row">
+                                                        <div className="col-md-6">
+                                                            <h5>Starting date</h5>
+                                                            <DatePicker className="form-control" name="start_date" disabled value={this.state.nftData?.start_date1 ? this.state.nftData?.start_date1 : ''} />
+                                                        </div>
+                                                        <div className="col-md-6">
+                                                            <h5>Expiration date</h5>
+                                                            <DatePicker className="form-control" name="expiry_date" minDate={this.state.endDate} disabled value={this.state.nftData?.expiry_date1 ? this.state.nftData?.expiry_date1 : ''} />
+
+                                                        </div>
+                                                        <div className="spacer-single" />
+                                                    </div>
+                                                </>
+                                                :
+
+                                                ""
+                                        }
+                                    </div>
+                                </div>
+                                <div className="spacer-10" />
+                                <br />
+                                {this.state.spinLoader === 0 ?
+                                    <input type="submit" onClick={this.approveNFT.bind(this, this.state.nftData)} value="Approve" id="submit" className="btn-main" defaultValue="Create Item" />
+                                    :
+                                    <button disabled className="btn-main" id="deposit-page" >Processing &nbsp; <i className="fa fa-spinner fa-spin validat"></i></button>
+                                }
+                                <div className="spacer-single" />
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </>

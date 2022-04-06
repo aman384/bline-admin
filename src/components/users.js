@@ -43,12 +43,12 @@ export default class userlist extends Component {
 
             {
                 key: "full_name",
-                text: "user name",
+                text: "Name",
                 cell: (item) => {
                     return (
                         <td nowrap="nowrap">
                             <span>
-                                {item.full_name ? 'N/A' : item.full_name}
+                                {item.full_name === null || item.full_name === 'null' || item.full_name === 'unnamed'  ? 'N/A' : item.full_name}
                             </span>
 
                         </td>
@@ -67,7 +67,7 @@ export default class userlist extends Component {
                     return (
                         <td nowrap="nowrap">
                             <span>
-                                {item.email ? 'N/A' : item.email}
+                                {item.email === null || item.email === 'null' ? 'N/A' : item.email}
                             </span>
 
                         </td>
@@ -101,9 +101,9 @@ export default class userlist extends Component {
                     return (
                         <>
 
-                            {item.is_active == 0 ? <button type="submit" onClick={this.deleteUser.bind(this, item)} data-toggle="tooltip" data-target="#responsive-modal1" data-original-title="Close" className=" btn-danger"> <i class="fa fa-minus-square m-r-10"></i> </button>
+                            {/* {item.is_active == 0 ? <button type="submit" onClick={this.deleteUser.bind(this, item)} data-toggle="tooltip" data-target="#responsive-modal1" data-original-title="Close" className=" btn-danger"> <i class="fa fa-minus-square m-r-10"></i> </button>
                                 : <button type="submit" onClick={this.deleteUser.bind(this, item)} data-toggle="tooltip" data-target="#responsive-modal1" data-original-title="Close" className=" btn-danger"> <i class="fa fa-plus-square m-r-10"></i> </button>
-                            }
+                            } */}
 
                             <Link to={`${config.baseUrl}userDetail/${item.id}`} data-toggle="tooltip" data-original-title="" style={{ margin: "5px" }} >
                                 <button type='button' className="btn-info" ><i class="fa fa-eye"></i> </button>

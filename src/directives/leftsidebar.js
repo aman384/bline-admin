@@ -12,7 +12,7 @@ export default class Leftsidebar extends Component {
     }
 
     componentDidMount() {
-
+        
 
     }
 
@@ -27,7 +27,8 @@ export default class Leftsidebar extends Component {
                 return 
                  */}
                  {/* style={{width:fname==undefined || fname == 0 ?'225px':'50px'}} */}
-                <div className="fixed-sidebar-left mobileLeftShow" >
+                 <div >
+                 <div className="fixed-sidebar-left mobileLeftShow">
                 <ul className="nav navbar-nav side-nav nicescroll-bar">
                     <li className="navigation-header">
                         <span>Main</span>
@@ -67,12 +68,12 @@ export default class Leftsidebar extends Component {
 
                     </li> */}
                     <li>
-                        <Link to={`${config.baseUrl}categoryList`}><div className="pull-left"><i className="zmdi zmdi-collection-image mr-20"></i><span className="right-nav-text">Category</span></div><div className="pull-right"><i ></i></div><div className="clearfix"></div></Link>
+                        <Link to={`${config.baseUrl}categoryList`}><div className="pull-left"><i className="zmdi zmdi-collection-image mr-20"></i><span className="right-nav-text">Games Category</span></div><div className="pull-right"><i ></i></div><div className="clearfix"></div></Link>
 
                     </li>
 
                     <li>
-                        <Link to={`${config.baseUrl}gamescategory`}><div className="pull-left"><i class="zmdi zmdi-gamepad mr-20"></i><span className="right-nav-text">Games Category</span></div><div className="pull-right"><i ></i></div><div className="clearfix"></div></Link>
+                        <Link to={`${config.baseUrl}gamescategory`}><div className="pull-left"><i class="zmdi zmdi-gamepad mr-20"></i><span className="right-nav-text">Games</span></div><div className="pull-right"><i ></i></div><div className="clearfix"></div></Link>
 
                     </li>
 
@@ -111,6 +112,16 @@ export default class Leftsidebar extends Component {
                         <ul id="app_dr" class="collapse collapse-level-1" aria-expanded="false">
 
                             <li className="">
+                                <Link to={`${config.baseUrl}faqs`} class="dropdown-item waves-light waves-effect">
+
+                                    <span className="pcoded-micon"><i class="zmdi zmdi-format-list-bulleted mr-20"></i></span>
+                                    <span className="pcoded-mtext">FAQ's</span>
+                                    <span className="pcoded-mcaret"></span>
+                                </Link>
+
+                            </li>
+
+                            <li className="">
                                 <Link to={`${config.baseUrl}privacyAndPolicy`} class="dropdown-item waves-light waves-effect">
 
                                     <span className="pcoded-micon"><i class="zmdi zmdi-format-list-bulleted mr-20"></i></span>
@@ -135,6 +146,14 @@ export default class Leftsidebar extends Component {
                                     <span className="pcoded-mcaret"></span>
                                 </Link>
                             </li>
+
+                            <li className="">
+                                <Link to={`${config.baseUrl}bannerImage`} class="dropdown-item waves-light waves-effect">
+                                    <span className="pcoded-micon"><i class="zmdi zmdi-spinner mr-20"></i></span>
+                                    <span className="pcoded-mtext"> Banner Image </span>
+                                    <span className="pcoded-mcaret"></span>
+                                </Link>
+                            </li>
                         </ul>
 
                     </li>
@@ -143,6 +162,8 @@ export default class Leftsidebar extends Component {
 
 					</li> */}
                 </ul>
+           
+                 </div>
             </div>
                 
                 

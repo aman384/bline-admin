@@ -72,10 +72,10 @@ export default class dashboard extends Component {
                             </li>
                         </ul>
                     </div>
-                    <div className="right-sidebar-backdrop"></div>
+                    <div className="right-sidebar-backdrop "></div>
                     <div className="page-wrapper">
                         <div className="container-fluid pt-25">
-                            <div className="row">
+                            <div className="row dashboar-main">
                                 <div className="col-lg-3 box-counter col-md-6 col-sm-6 col-xs-12">
                                     <div className="panel panel-default card-view pa-0">
                                         <div className="panel-wrapper collapse in">
@@ -83,9 +83,17 @@ export default class dashboard extends Component {
                                                 <div className="sm-data-box">
                                                     <div className="container-fluid" >
                                                         <div className="row">
+                                                            <div className='col-xs-12'>
+                                                                <div className='dash-img'><img src='images/dash1.png ' />
+                                                                </div>
+                                                            </div>
                                                             <div className="col-xs-12 text-center pl-0 pr-0 data-wrap-left">
                                                                 <span className="weight-500 uppercase-font block font-100  counter">{this.state.dashboard_list.nft_count}</span>
                                                                 <span className="weight-500 uppercase-font block font-13 ">Total NFT's </span>
+                    
+                                                            </div>
+                                                            <div className='col-xs-12'>
+                                                                
                                                             </div>
                                                         </div>
                                                     </div>
@@ -101,6 +109,10 @@ export default class dashboard extends Component {
                                                 <div className="sm-data-box">
                                                     <div className="container-fluid" >
                                                         <div className="row">
+                                                        <div className='col-xs-12'>
+                                                                <div className='dash-img'><img src='images/dash1.png ' />
+                                                                </div>
+                                                            </div>
                                                             <div className="col-xs-12 text-center pl-0 pr-0 data-wrap-left">
                                                                 <span className="weight-500 uppercase-font block font-100  counter">{this.state.dashboard_list.today_nft_count}</span>
                                                                 <span className="weight-500 uppercase-font block font-13 ">Today's Total NFT's </span>
@@ -119,6 +131,10 @@ export default class dashboard extends Component {
                                                 <div className="sm-data-box">
                                                     <div className="container-fluid" >
                                                         <div className="row">
+                                                        <div className='col-xs-12'>
+                                                                <div className='dash-img'><img src='images/dash2.png ' />
+                                                                </div>
+                                                            </div>
                                                             <div className="col-xs-12 text-center pl-0 pr-0 data-wrap-left">
                                                                 <span className="weight-500 uppercase-font block font-100 counter">{this.state.dashboard_list.total_sale_ada}</span>
                                                                 <span className="weight-500 uppercase-font block font-13 ">Total Sales  </span>
@@ -138,6 +154,10 @@ export default class dashboard extends Component {
                                                 <div className="sm-data-box">
                                                     <div className="container-fluid" >
                                                         <div className="row">
+                                                        <div className='col-xs-12'>
+                                                                <div className='dash-img'><img src='images/dash2.png ' />
+                                                                </div>
+                                                            </div>
                                                             <div className="col-xs-12 text-center pl-0 pr-0 data-wrap-left">
                                                                 <span className="weight-500 uppercase-font block font-75  counter ">{this.state.dashboard_list.today_sale_ada}</span>
                                                                 <span className="weight-500 uppercase-font block font-13 ">Today's Total Sale </span>
@@ -156,6 +176,10 @@ export default class dashboard extends Component {
                                                 <div className="sm-data-box">
                                                     <div className="container-fluid" >
                                                         <div className="row">
+                                                        <div className='col-xs-12'>
+                                                                <div className='dash-img'><img src='images/dash3.png ' />
+                                                                </div>
+                                                            </div>
                                                             <div className="col-xs-12 text-center pl-0 pr-0 data-wrap-left">
                                                                 <span className="weight-500 uppercase-font block font-75 counter ">{this.state.dashboard_list.sold_nft}</span>
                                                                 <span className="weight-500 uppercase-font block font-13 ">Total NFT sold </span>
@@ -174,6 +198,10 @@ export default class dashboard extends Component {
                                                 <div className="sm-data-box">
                                                     <div className="container-fluid" >
                                                         <div className="row">
+                                                        <div className='col-xs-12'>
+                                                                <div className='dash-img'><img src='images/dash3.png ' />
+                                                                </div>
+                                                            </div>
                                                             <div className="col-xs-12 text-center pl-0 pr-0 data-wrap-left">
                                                                 <span className="weight-500 uppercase-font block font-75 counter ">{this.state.dashboard_list.sold_nft_today}</span>
                                                                 <span className="weight-500 uppercase-font block font-13 ">Todays's Total Sold NFT's </span>
@@ -192,6 +220,10 @@ export default class dashboard extends Component {
                                                 <div className="sm-data-box">
                                                     <div className="container-fluid" >
                                                         <div className="row">
+                                                        <div className='col-xs-12'>
+                                                                <div className='dash-img'><img src='images/dash4.png ' />
+                                                                </div>
+                                                            </div>
                                                             <div className="col-xs-12 text-center pl-0 pr-0 data-wrap-left">
                                                                 <span className="weight-500 uppercase-font block font-75 counter ">{this.state.dashboard_list.user_count}</span>
                                                                 <span className="weight-500 uppercase-font block font-13 ">Total User</span>
@@ -210,6 +242,10 @@ export default class dashboard extends Component {
                                                 <div className="sm-data-box">
                                                     <div className="container-fluid" >
                                                         <div className="row">
+                                                        <div className='col-xs-12'>
+                                                                <div className='dash-img'><img src='images/dash4.png ' />
+                                                                </div>
+                                                            </div>
                                                             <div className="col-xs-12 text-center pl-0 pr-0 data-wrap-left">
                                                                 <span className="weight-500 uppercase-font block font-75 counter ">{this.state.dashboard_list.user_count_today}</span>
                                                                 <span className="weight-500 uppercase-font block font-13 ">Todays's User</span>
@@ -228,6 +264,10 @@ export default class dashboard extends Component {
                                                 <div className="sm-data-box">
                                                     <div className="container-fluid" >
                                                         <div className="row">
+                                                        <div className='col-xs-12'>
+                                                                <div className='dash-img'><img src='images/dash5.png ' />
+                                                                </div>
+                                                            </div>
                                                             <div className="col-xs-12 text-center pl-0 pr-0 data-wrap-left">
                                                                 <span className="weight-500 uppercase-font block font-75 counter ">{this.state.dashboard_list.total_fee}</span>
                                                                 <span className="weight-500 uppercase-font block font-13 ">Total Fees</span>
@@ -246,6 +286,10 @@ export default class dashboard extends Component {
                                                 <div className="sm-data-box">
                                                     <div className="container-fluid" >
                                                         <div className="row">
+                                                        <div className='col-xs-12'>
+                                                                <div className='dash-img'><img src='images/dash5.png ' />
+                                                                </div>
+                                                            </div>
                                                             <div className="col-xs-12 text-center pl-0 pr-0 data-wrap-left">
                                                                 <span className="weight-500 uppercase-font block font-75 counter ">{this.state.dashboard_list.total_fee_today}</span>
                                                                 <span className="weight-500 uppercase-font block font-13 ">Todays's Total Fees</span>

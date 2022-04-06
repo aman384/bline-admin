@@ -46,6 +46,9 @@ import userTransaction from './components/userTransaction'
 import realestateslider from './components/realestateslider'
 import royalty from './components/royalty'
 import gamescategory from './components/gamescategory'
+import bannerImage from './components/bannerImage';
+import faqs from './components/faqs';
+import editNft from './components/editNft'
 
 function App() {
   return (
@@ -93,6 +96,12 @@ function App() {
           <Route path={`${config.baseUrl}realestateslider`} exact component={realestateslider}/>
           <Route path={`${config.baseUrl}royalty`} exact component={royalty}/>
           <Route path={`${config.baseUrl}gamescategory`} exact component={gamescategory}/>
+          <Route path={`${config.baseUrl}bannerImage`} exact component={bannerImage}/>
+          <Route path={`${config.baseUrl}faqs`} exact component={faqs}/>
+          <Route path={`${config.baseUrl}editNft/:id`} exact component={editNft} />
+
+
+          
           </Switch>
       </div>
     </BrowserRouter>

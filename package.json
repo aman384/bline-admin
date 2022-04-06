@@ -1,8 +1,8 @@
 {
-  "name": "nxft-admin",
+  "name": "bline-admin",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://espsofttech.org/bline-admin/",
+  "homepage": "https://espsofttech.org/bline-admin-new/",
   "dependencies": {
     "@ashvin27/react-datatable": "^1.5.3",
     "@blueprintjs/core": "^3.53.0",
@@ -31,6 +31,7 @@
     "react-scripts": "^4.0.3",
     "react-toastify": "^7.0.4",
     "reactjs-popup": "^2.0.4",
+    "video-react": "^0.15.0",
     "web-vitals": "^1.1.1",
     "web3": "^1.7.0"
   },

@@ -155,7 +155,7 @@ export default class gamescategory extends Component {
         console.log(id)
         confirmAlert({
             title: 'Confirm to submit',
-            message: 'Are you sure to delete this Category..',
+            message: 'Are you sure to delete this Games..',
             buttons: [
                 {
                     label: 'Yes',
@@ -385,7 +385,7 @@ export default class gamescategory extends Component {
                         <div className="container-fluid pt-25">
                             <div className="row heading-bg">
                                 <div className="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                                    <h5 className="txt-dark">Games Category</h5>
+                                    <h5 className="txt-dark">Games</h5>
                                 </div>
 
 
@@ -407,7 +407,7 @@ export default class gamescategory extends Component {
 
                                                         <div className="form-actions">
 
-                                                            <button type='button' data-toggle="modal" data-target="#responsive-modal1" className="btn btn-primary" onClick={this.openModel}>Add Category </button>
+                                                            <button type='button' data-toggle="modal" data-target="#responsive-modal1" className="btn btn-primary" onClick={this.openModel}>Add Games </button>
 
                                                             <div className="clearfix"></div>
                                                         </div>
@@ -459,18 +459,15 @@ export default class gamescategory extends Component {
                                             <form>
 
                                                 <div>
-
-
-
-                                                    <div className="form-group mb-0">
-                                                        <label className="control-label mb-10">Games Category Name</label>
-                                                        <input type="text" id="firstName" onChange={this.handleChange} name="name" className="form-control" placeholder="Category Name" value={this.state.name} />
-                                                        {this.state.nameerr.length > 0 ? <div><span className='alert_validation'>{this.state.nameerr}</span></div> : ''}
-                                                    </div>
                                                     <div className='form-group mb-0'>
-                                                        <label className="control-label mb-10">Category Type</label>
+                                                        <label className="control-label mb-10">Games Category Type</label>
                                                         <Select options={this.state.category_list_option} values={this.state.selectedOption} onChange={(values) => this.changeSelecter(values)} required />
                                                         {this.state.selecterr.length > 0 ? <div><span className='alert_validation'>{this.state.selecterr}</span></div> : ''}
+                                                    </div>
+                                                    <div className="form-group mb-0">
+                                                        <label className="control-label mb-10">Games Name</label>
+                                                        <input type="text" id="firstName" onChange={this.handleChange} name="name" className="form-control" placeholder="Games Name" value={this.state.name} />
+                                                        {this.state.nameerr.length > 0 ? <div><span className='alert_validation'>{this.state.nameerr}</span></div> : ''}
                                                     </div>
                                                 </div>
                                             </form>

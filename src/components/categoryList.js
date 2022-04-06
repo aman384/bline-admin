@@ -135,7 +135,7 @@ export default class categorylist extends Component {
     async deleteCategory(id) {
         confirmAlert({
             title: 'Confirm to submit',
-            message: 'Are you sure to delete this Category..',
+            message: 'Are you sure to delete this Games Category..',
             buttons: [
                 {
                     label: 'Yes',
@@ -217,7 +217,7 @@ export default class categorylist extends Component {
             .then(result => {
 
                 if (result.data.success === true) {
-                    toast.success(result.data.msg, {
+                    toast.success('Add Games Category!', {
                         position: toast.POSITION.TOP_CENTER,
                     }, setTimeout(() => {
                        
@@ -322,7 +322,7 @@ export default class categorylist extends Component {
                         <div className="container-fluid pt-25">
                             <div className="row heading-bg">
                                 <div className="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                                    <h5 className="txt-dark">Category</h5>
+                                    <h5 className="txt-dark">Games Category</h5>
                                 </div>
                                
                               
@@ -344,7 +344,7 @@ export default class categorylist extends Component {
 
                                                         <div className="form-actions">
 
-                                                            <button type='button' data-toggle="modal" data-target="#responsive-modal1" className="btn btn-primary">Add Category </button>
+                                                            <button type='button' data-toggle="modal" data-target="#responsive-modal1" className="btn btn-primary">Add Games Category </button>
 
                                                             <div className="clearfix"></div>
                                                         </div>
@@ -400,8 +400,8 @@ export default class categorylist extends Component {
 
 
                                                     <div className="form-group mb-0">
-                                                        <label className="control-label mb-10">Category Name</label>
-                                                        <input type="text" id="firstName" onChange={this.handleChange} name="name" className="form-control" placeholder="Category Name" value={this.state.name} />
+                                                        <label className="control-label mb-10">Games Category Name</label>
+                                                        <input type="text" id="firstName" onChange={this.handleChange} name="name" className="form-control" placeholder="Games Category Name" value={this.state.name} />
                                                     </div>
                                                 </div>
                                             </form>

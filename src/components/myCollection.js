@@ -32,7 +32,7 @@ export default class usercollection extends Component {
             image_preview: '',
             banner_preview: '',
             image_file1: null,
-            games_category: '',
+            games_category: 'text',
             image_preview1: '',
             facebook: "",
             insta: "",
@@ -74,8 +74,28 @@ export default class usercollection extends Component {
                 text: "Date",
                 cell: (item) => {
                     return (
-                        <span className="sub sub-s2">{(item.datetime.replace('.000Z', '')).replace('T', ' ')}</span>
+                        <td nowrap="nowrap">
 
+                            {item.datetime.slice(0, 10)}
+                        </td>
+                    );
+                }
+            },
+            {
+                key: "profile_pic",
+                text: "image",
+                cell: (item) => {
+                    return (
+                        <>
+                            {item.profile_pic === null || item.profile_pic === '' || item.profile_pic === undefined
+                                ?
+                                <img src='images/noimage.png' className="product-img" />
+                                :
+                                <a href={`${config.imageUrl1}${item.profile_pic}`} target="_blank">
+                                    <img src={`${config.imageUrl1}${item.profile_pic}`} className="product-img" />
+                                </a>
+                            }
+                        </>
                     );
                 }
             },
@@ -430,12 +450,12 @@ export default class usercollection extends Component {
                 if (result.data.success === true) {
 
                     if (featured == 0) {
-                        toast.success('Added in featured Tag!!', {
+                        toast.success('Added in trending!!', {
                             position: toast.POSITION.TOP_CENTER
                         });
                     }
                     else if (featured == 1) {
-                        toast.error('Removed From featured Tag!!', {
+                        toast.error('Removed From trending!!', {
                             position: toast.POSITION.TOP_CENTER
                         });
                     }
@@ -506,19 +526,19 @@ export default class usercollection extends Component {
                             <div class="modal-body">
                                 <div className="form-wrap">
                                     <form action="#">
-                                        <h6 className="txt-dark capitalize-font"><i className="zmdi zmdi-info-outline mr-10"></i>Add Product</h6>
+                                        <h6 className="txt-dark capitalize-font"><i className="zmdi zmdi-info-outline mr-10"></i>Add Collection</h6>
                                         <hr className="light-grey-hr" />
                                         <div className="row">
                                             <div className="col-md-6">
                                                 <div className="form-group">
                                                     <label className="control-label mb-10">Collection Name</label>
-                                                    <input type="text" onChange={this.handleChange} value={this.state.name} className="form-control" name="name" placeholder="Collection Name" value={this.state.name} />
+                                                    <input type="text" onChange={this.handleChange} value={this.state.name} className="form-control" name="name" placeholder="Collection Name" maxlength="50" />
                                                 </div>
                                             </div>
                                             <div className="col-md-6">
                                                 <div className="form-group">
                                                     <label className="control-label mb-10">Description</label>
-                                                    <input type="text" name="description" onChange={this.handleChange} value={this.state.description} className="form-control" placeholder="Description" />
+                                                    <input type="text" name="description" onChange={this.handleChange} value={this.state.description} className="form-control" placeholder="Description" maxlength="300"/>
                                                 </div>
                                             </div>
                                             <div className="col-md-6">
@@ -542,7 +562,7 @@ export default class usercollection extends Component {
                                                 </div>
                                             </div>
 
-                                            <div class="col-md-6">
+                                            {/* <div class="col-md-6">
                                                 <div className="form-group">
                                                     <label className="control-label mb-10">Games Category</label>
                                                     <select onChange={this.handleChange} className="form-control" name="games_category" >
@@ -552,7 +572,7 @@ export default class usercollection extends Component {
                                                         ))}
                                                     </select>
                                                 </div>
-                                            </div>
+                                            </div> */}
 
                                             <div className="col-md-6">
                                                 <div className="form-group">
@@ -601,7 +621,7 @@ export default class usercollection extends Component {
                                 <button type="button" class="btn btn-default" data-dismiss="modal" onClick={e => this.closeModal()}>Close</button>
 
                                 {this.state.loader === '' ?
-                                    <button type='submit' disabled={!this.state.name || !this.state.image_file || !this.state.coverPhoto} onClick={this.createCollectionAPI} className="btn btn-primary">Add </button>
+                                    <button type='submit' disabled={!this.state.name || !this.state.image_file || !this.state.coverPhoto} onClick={this.createCollectionAPI} className="btn btn-primary" >Add </button>
                                     :
                                     <button type='submit' disabled className="btn btn-primary">Loading... </button>
 

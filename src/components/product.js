@@ -69,11 +69,11 @@ export default class product extends Component {
                     );
                 }
             },
-            {
-                key: "description",
-                text: "Description",
-                sortable: true
-            },
+            // {
+            //     key: "description",
+            //     text: "Description",
+            //     sortable: true
+            // },
 
             {
                 key: "image",
@@ -101,7 +101,7 @@ export default class product extends Component {
                 cell: (item) => {
                     return (
                         <>
-                            <a href={`${config.baseUrl}userDetail/` + item.owner_id} target="_blank" >
+                            <a href={`${config.redirectUrl}UserProfile/` + item.owner_id} target="_blank" >
                                 {item.owner_name}
                             </a>
 
@@ -115,7 +115,7 @@ export default class product extends Component {
                 cell: (item) => {
                     return (
                         <>
-                            <a href={`${config.baseUrl}userDetail/` + item.creator_id} target="_blank" >
+                            <a href={`${config.redirectUrl}UserProfile/` + item.creator_id} target="_blank" >
                                 {item.creator_name}
                             </a>
 
@@ -130,7 +130,7 @@ export default class product extends Component {
             },
             {
                 key: "item_category",
-                text: "Category Name",
+                text: "Games Category Name",
                 sortable: true
             },
 
@@ -147,7 +147,7 @@ export default class product extends Component {
             },
             {
                 key: "is_featured",
-                text: "Featured",
+                text: "Trending",
                 sortable: true,
                 cell: (item) => {
                     return (
@@ -216,23 +216,23 @@ export default class product extends Component {
         this.getItemAPI();
         this.getAdminCollectionAPI();
         this.getOnSaleAPI()
-      //  this.getGamesCategoryAPI()
+        //  this.getGamesCategoryAPI()
     }
 
     async getGamesCategoryAPI(value) {
         // console.log('item_subcategory_id',value)
         await axios({
-          method: 'get',
-          url: `${config.apiUrl}getGamesCategory`,
+            method: 'get',
+            url: `${config.apiUrl}getGamesCategory`,
         }).then(response => {
-          if (response.data.success === true) {
-            this.setState({
-              gamesCategoryRes: response.data.response.filter(item => item.category_id == parseInt(value))
-            })
-            //  console.log("................", this.state.gamesCategoryRes);
-          }
+            if (response.data.success === true) {
+                this.setState({
+                    gamesCategoryRes: response.data.response.filter(item => item.category_id == parseInt(value))
+                })
+                //  console.log("................", this.state.gamesCategoryRes);
+            }
         })
-      }
+    }
 
     async getAdminCollectionAPI() {
         axios.get(`${config.apiUrl}getAdminCollection`, {},)
@@ -396,10 +396,10 @@ export default class product extends Component {
 
         if (e.target.name == 'item_category_id') {
             this.setState({
-              'categoryError': ""
+                'categoryError': ""
             })
             this.getGamesCategoryAPI(e.target.value)
-          }
+        }
 
         if (e.target.checked === true && e.target.name === 'end_start_date') {
             this.setState({
@@ -786,12 +786,12 @@ export default class product extends Component {
 
                 if (result.data.success === true) {
                     if (featured == 0) {
-                        toast.success('Added in featured!!', {
+                        toast.success('Added in trending!!', {
                             position: toast.POSITION.TOP_CENTER
                         });
                     }
                     else if (featured == 1) {
-                        toast.error('Removed From featured!!', {
+                        toast.error('Removed From trending!!', {
                             position: toast.POSITION.TOP_CENTER
                         });
                     }
