@@ -16,12 +16,12 @@ const config = {
   // apiUrl: "https://espsofttech.org:6021/api/",
   // blockchinUrl: "https://rinkeby.etherscan.io/address/",
   // blockchainUrltrx: "https://rinkeby.etherscan.io/tx/",
-  // imageUrl1: "https://espsofttech.org/bline/backend/uploads/",
+  // imageUrl1: "https://espsofttech.org/bline-new/backend/uploads/",
 
   //==============================================================================================================
 
   imageUrl: "https://ipfs.io/ipfs/",
-  redirectUrl:"https://espsofttech.org/bline/",
+  redirectUrl:"https://espsofttech.org/bline-new/",
 
   // baseUrl: '/bline_dev/',
   // apiUrl: "http://localhost:8008/api/",

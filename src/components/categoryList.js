@@ -182,7 +182,7 @@ export default class categorylist extends Component {
                 toast.success(response.data.msg, {
                     position: toast.POSITION.TOP_CENTER
                 });
-                window.location.reload()
+                // window.location.reload()
             }
             else if (response.data.success === false) {
                 toast.error(response.data.msg, {
@@ -217,7 +217,7 @@ export default class categorylist extends Component {
             .then(result => {
 
                 if (result.data.success === true) {
-                    toast.success('Add Games Category!', {
+                    toast.success('Games Category Added!!', {
                         position: toast.POSITION.TOP_CENTER,
                     }, setTimeout(() => {
                        

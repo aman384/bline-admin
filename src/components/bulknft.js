@@ -61,7 +61,7 @@ export default class bulknft extends Component {
                 cell: (item) => {
                     return (
                         <>
-                            <a href={`https://espsofttech.org/bline/nftDetails/${item.id}`} target="_blank" >
+                            <a href={`https://espsofttech.org/bline-new/nftDetails/${item.id}`} target="_blank" >
                                 {item.name}
                             </a>
 

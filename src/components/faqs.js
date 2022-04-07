@@ -126,7 +126,7 @@ export default class faqs extends Component {
     faqDelete(id) {
         confirmAlert({
             title: 'Confirm to submit',
-            message: 'Are you sure to delete this Que and Ans!.',
+            message: 'Are you sure to delete this Faq!.',
             buttons: [
                 {
                     label: 'Yes',
@@ -207,7 +207,7 @@ export default class faqs extends Component {
                     <h3 className="page-title">Add Faqs</h3>
                 </div>
                 <div className="col-md-2">
-                <button type='button' data-toggle="modal" data-target="#responsive-modal1" className="btn btn-primary pb-4">Add </button>
+                <button type='button' data-toggle="modal" data-target="#responsive-modal1" className="btn btn-primary pb-4">Add Faq's</button>
                 </div>
             </div>
 

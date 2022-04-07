@@ -3851,7 +3851,7 @@ ul.wysihtml5-toolbar a.btn.wysihtml5-command-active, ul.wysihtml5-toolbar .wizar
   .nav-tabs > li {
     margin-right: 5px; }
     .nav-tabs > li > a {
-      background: #31a1f2;
+      background: #dddddd;
       border: none;
       padding: 10px 20px;
       color: #081f3f;
@@ -3869,12 +3869,12 @@ ul.wysihtml5-toolbar a.btn.wysihtml5-command-active, ul.wysihtml5-toolbar .wizar
       color: #212121;
       border-color: transparent; } */
       .nav-tabs > li.active > a, .nav-tabs > li.open > a {
-        background: #081f3f;
-        color: #31a1f2;
+        background: #31a1f2;
+        color: #fff;
         border-color: transparent;
     }
       .nav-tabs > li.active > a:active, .nav-tabs > li.active > a:focus, .nav-tabs > li.active > a:hover, .nav-tabs > li.open > a:active, .nav-tabs > li.open > a:focus, .nav-tabs > li.open > a:hover {
-        background: #081f3f;
+        background: #31a1f2;
         color: #fff;
         border-color: transparent; }
     .nav-tabs > li:first-child > a {
@@ -7387,10 +7387,15 @@ td p a {
   color: #ffffffd4;
 }
 p a i.fa {
-  font-size: 20px;
+  font-size: 16px;
   background: #31a1f2;
-  padding: 6px;
+  /* padding: 10px; */
   border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  color: #fff;
+  text-align: center;
+  line-height: 2;
 }
 span.discord-img {
   background: #31a1f2;
@@ -7402,8 +7407,9 @@ span.discord-img {
 }
 .dashboar-main .panel.panel-default.card-view.pa-0 {
   height: 150px;
-  box-shadow: 0px 0px 10px #221d1d9e;
-  background-color:#02055e;
+  box-shadow: 0px 6px 10px #00000069;
+  background: linear-gradient(259deg, #13468d, #02055e);
+  padding: 20px!important;
 }
 /* .dashboar-main .panel.panel-default.card-view:hover{
   background-color: #31a1f2e3;

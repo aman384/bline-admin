@@ -267,16 +267,16 @@ export default class userDetails extends Component {
                 text: "Transaction Type",
 
             },
-            {
-                key: "creater_name",
-                text: "NFT Creator",
+            // {
+            //     key: "creater_name",
+            //     text: "NFT Creator",
 
-            },
-            {
-                key: "owner_name",
-                text: "NFT Owner",
+            // },
+            // {
+            //     key: "owner_name",
+            //     text: "NFT Owner",
 
-            },
+            // },
             {
                 key: "image",
                 text: "Image",

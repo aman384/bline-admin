@@ -62,7 +62,7 @@ export default class changePassword extends Component {
                     toast.success(result.data.msg, {
                         position: toast.POSITION.TOP_CENTER
                     });
-                    window.location.href = `${config.baseUrl}dashboard`
+                    // window.location.href = `${config.baseUrl}dashboard`
                 }
                 else if (result.data.success === false) {
 

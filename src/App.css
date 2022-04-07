@@ -247,3 +247,6 @@ i.fa.fa-bars.scrollable {
   font-size: 30px;
   margin-bottom: 10px;
 }
+.react-confirm-alert-body h1 {
+  font-size: 35px;
+}

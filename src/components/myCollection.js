@@ -194,35 +194,7 @@ export default class usercollection extends Component {
     }
 
     closeModal() {
-       this.setState({
-        description: '',
-        datetime: '',
-        description: '',
-        profile_pic: '',
-        banner: '',
-        telegram:'',
-        user_list: [],
-        name: '',
-        profileData: '',
-        image_file: '',
-        image_preview: '',
-        banner_preview: '',
-        image_file1: null,
-        games_category: '',
-        image_preview1: '',
-        facebook: "",
-        insta: "",
-        twitter: "",
-        pinterest: "",
-        website: "",
-        youtube: "",
-        discord: "",
-        loader: '',
-        policy_id: '',
-        policy_type: '0',
-        description: '',
-        
-       })
+      window.location.reload()
     }
 
     async getGamesCategoryAPI() {
@@ -409,9 +381,9 @@ export default class usercollection extends Component {
                             secondary: '#FFFAEE',
                         },
                     });
-                    // setTimeout(() => {
-                    //          window.location.reload()
-                    // }, 2000);
+                    setTimeout(() => {
+                             window.location.reload()
+                    }, 2000);
                 } else {
                     toast.error(result.data.msg, {
                         style: {
@@ -450,12 +422,12 @@ export default class usercollection extends Component {
                 if (result.data.success === true) {
 
                     if (featured == 0) {
-                        toast.success('Added in trending!!', {
+                        toast.success('Added In Trending!!', {
                             position: toast.POSITION.TOP_CENTER
                         });
                     }
                     else if (featured == 1) {
-                        toast.error('Removed From trending!!', {
+                        toast.error('Removed From Trending!!', {
                             position: toast.POSITION.TOP_CENTER
                         });
                     }

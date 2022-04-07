@@ -1602,6 +1602,13 @@ export default class adminnft extends Component {
                                                             </div>
                                                         </div>
 
+                                                        <div className="col-md-6">
+                                                            <div className="form-group">
+                                                                <label className="control-label mb-10">royaltie</label>
+                                                                <input type="text" onKeyPress={(event) => { if (!/^\d*[.]?\d{0,1}$/.test(event.key)) { event.preventDefault(); } }} onChange={this.handleChange1} name="royaltie" className="form-control" placeholder="Royaltie" value={this.state.royaltie} />
+                                                            </div>
+                                                        </div>
+
 
                                                         {/* <div className="col-md-6">
                                                             <div className="form-group">
@@ -1622,13 +1629,13 @@ export default class adminnft extends Component {
                                                                 <div className="col-md-6">
                                                                     <div className="form-group">
                                                                         <label className="control-label mb-10">Start Date</label>
-                                                                        <input type="date" onChange={this.handleChange1} min={this.state.minDate} className="form-control" name="start_date" value={this.state.start_date} />
+                                                                        <input type="date" onChange={this.handleChange1} min={new Date()} className="form-control" name="start_date" value={this.state.start_date} />
                                                                     </div>
                                                                 </div>
                                                                 <div className="col-md-6">
                                                                     <div className="form-group">
                                                                         <label className="control-label mb-10">Expiry Date</label>
-                                                                        <input type="date" min={this.state.minDate} onChange={this.handleChange1} className="form-control" name="expiry_date" value={this.state.expiry_date} />
+                                                                        <input type="date" min={new Date()} onChange={this.handleChange1} className="form-control" name="expiry_date" value={this.state.expiry_date} />
                                                                     </div>
                                                                 </div>
 
@@ -1833,6 +1840,7 @@ export default class adminnft extends Component {
                                         {console.log(this.state.nftData)}
                                         {this.state.nftData?.sell_type === 1 ?
                                             <>
+                                            <p style={{ color: 'red' }}>List price and listing schedule can not be edited once the item is listed. You will need to cancel your listing and relist the item with the updated price and dates.</p>
                                                 <h5>NFT Type : Price</h5>
                                                 <h5>Price</h5>
                                                 <input type="text" disabled value={this.state.nftData?.price} name="price" id="item_price_bid" className="form-control" placeholder="Enter Price" />
@@ -1840,6 +1848,7 @@ export default class adminnft extends Component {
                                             :
                                             this.state.nftData?.sell_type === 2 ?
                                                 <>
+                                                <p style={{ color: 'red' }}>List price and listing schedule can not be edited once the item is listed. You will need to cancel your listing and relist the item with the updated price and dates.</p>
                                                     <h5>NFT Type : Auction</h5>
                                                     <h5>Minimum bid</h5>
                                                     <input type="text" name="minimum_bid_amount" disabled value={this.state.nftData?.price} id="item_price_bid" className="form-control" placeholder="Enter Minimum Bid" />

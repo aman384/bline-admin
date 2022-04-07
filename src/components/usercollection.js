@@ -217,8 +217,10 @@ export default class usercollection extends Component {
             .then(result => {
 
                 if (result.data.success === true) {
+                    let data = result.data.response.filter(item => item.user_id != 1);
+                    console.log(data);
                     this.setState({
-                        user_list: result.data.response
+                        user_list: data
                     })
 
 
@@ -397,12 +399,12 @@ export default class usercollection extends Component {
             .then(result => {
                 if (result.data.success === true) {
                     if (featured == 0) {
-                        toast.success('Add in trending!!', {
+                        toast.success('Add In Trending!!', {
                             position: toast.POSITION.TOP_CENTER
                         });
                     }
                     else if (featured == 1) {
-                        toast.error('Remove from trending!!', {
+                        toast.error('Remove From Trending!!', {
                             position: toast.POSITION.TOP_CENTER
                         });
                     }

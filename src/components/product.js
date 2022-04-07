@@ -61,7 +61,7 @@ export default class product extends Component {
                 cell: (item) => {
                     return (
                         <>
-                            <a href={`https://espsofttech.org/bline/nftDetails/${item.id}`} target="_blank" >
+                            <a href={`https://espsofttech.org/bline-new/nftDetails/${item.id}`} target="_blank" >
                                 {item.name}
                             </a>
 
@@ -786,12 +786,12 @@ export default class product extends Component {
 
                 if (result.data.success === true) {
                     if (featured == 0) {
-                        toast.success('Added in trending!!', {
+                        toast.success('Added In Trending!!', {
                             position: toast.POSITION.TOP_CENTER
                         });
                     }
                     else if (featured == 1) {
-                        toast.error('Removed From trending!!', {
+                        toast.error('Removed From Trending!!', {
                             position: toast.POSITION.TOP_CENTER
                         });
                     }
