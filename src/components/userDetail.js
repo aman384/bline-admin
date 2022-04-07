@@ -628,7 +628,7 @@ export default class userDetails extends Component {
                                                     <div className="col-md-6 col-6">
                                                         <p className='circle-icon'>{this.state.userDetailData?.facebook === '' && this.state.userDetailData?.insta === '' && this.state.userDetailData?.telegram === '' && this.state.userDetailData?.twitter === '' && this.state.userDetailData?.discord === '' ? 'N/A' :
 
-                                                            this.state.userDetailData?.facebook ? <a href={this.state.userDetailData?.facebook} target="_blank"> <i className="fa fa-facebook-square" aria-hidden="true"></i>&nbsp;</a> : ''}
+                                                            this.state.userDetailData?.facebook ? <a href={this.state.userDetailData?.facebook} target="_blank"> <i className="fa fa-facebook" aria-hidden="true"></i>&nbsp;</a> : ''}
                                                             {this.state.userDetailData?.insta ? <a href={this.state.userDetailData?.insta} target="_blank"> <i className="fa fa-instagram" aria-hidden="true"></i>&nbsp;</a> : ''}
                                                             {this.state.userDetailData?.telegram ? <a href={this.state.userDetailData?.telegram} target="_blank"> <i className="fa fa-telegram" aria-hidden="true"></i>&nbsp;</a> : ''}
                                                             {this.state.userDetailData?.twitter ? <a href={this.state.userDetailData?.twitter} target="_blank"> <i className="fa fa-twitter" aria-hidden="true"></i>&nbsp;</a> : ''}
