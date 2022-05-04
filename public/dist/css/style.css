@@ -5460,7 +5460,7 @@ a.compose-mail {
       color: #212121;
       background: rgba(33, 33, 33, 0.05); }
     .dropdown-menu > li > a i {
-      color: #878787;
+      color: #ffffff;
       font-size: 18px;
       margin-right: 10px;
       width: 18px; }
@@ -7399,8 +7399,26 @@ p a i.fa {
 }
 span.discord-img {
   background: #31a1f2;
+    padding: 6px;
+    width: 40px!important;
+    border-radius: 50%;
+    height: 40px!important;
+    position: relative;
+    top: 2px;
+}
+span.discord-imgs {
+  background: #31a1f2;
   padding: 6px;
+  width: 40px!important;
   border-radius: 50%;
+  height: 40px!important;
+  position: relative;
+  bottom: 2px;
+}
+span.discord-imgs img {
+ width: 22px;
+ position: relative;
+ top:5px;
 }
 .table-responsive{
   overflow-x: hidden;
@@ -7497,4 +7515,45 @@ form#form-create-item .form-group h5 {
 }
 form#form-create-item {
   margin-left: 20px;
+}
+.modal {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1050;
+    display: none;
+    overflow: hidden;
+    -webkit-overflow-scrolling: touch;
+    outline: 0;
+    background: #0000008a!important;
+}
+
+p.my_collection_icons {
+  display: flex;
+}
+p.my_collection_icons a {
+  margin: 0px 2px;
+}
+
+input#submit {
+  padding: 10px 25px;
+  border: 0px;
+  border-radius: 5px;
+  /* width: 50%; */
+}
+
+/*--------- 27/04/2022 Soniya -----------*/
+button#viewid {
+  position: relative;
+  top: 0px;
+  left: 0px;
+  width: 38%;
+}
+button#cancelid {
+  width: 115px;
+}
+.jodit-toolbar__box {
+  z-index: 0 !important;
 }

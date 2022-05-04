@@ -22,7 +22,7 @@ export default class changeprofile extends Component {
             image_preview: '',
         }
 
-         this.loginData = (!Cookies.get('loginSuccessblineAdmin'))? [] : JSON.parse(Cookies.get('loginSuccessblineAdmin'));
+        this.loginData = (!Cookies.get('loginSuccessblineAdmin')) ? [] : JSON.parse(Cookies.get('loginSuccessblineAdmin'));
         this.getUserProfilePicAPI = this.getUserProfilePicAPI.bind(this)
         this.updateProfilePicAPI = this.updateProfilePicAPI.bind(this)
 
@@ -73,7 +73,10 @@ export default class changeprofile extends Component {
                     toast.success(result.data.msg, {
                         position: toast.POSITION.TOP_CENTER
                     });
-                    this.getUserProfilePicAPI()
+
+                    setTimeout(() => {
+                        window.location.reload()
+                    }, 1000);
                 }
 
                 else if (result.data.success === false) {

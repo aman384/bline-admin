@@ -6127,7 +6127,8 @@ button.close {
     display: none;
     overflow: hidden;
     -webkit-overflow-scrolling: touch;
-    outline: 0
+    outline: 0;
+    background: #0000008a!important;
 }
 
 .modal.fade .modal-dialog {

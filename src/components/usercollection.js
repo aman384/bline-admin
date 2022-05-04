@@ -159,7 +159,7 @@ export default class usercollection extends Component {
                                 {item?.telegram ? <a href={item?.telegram} target="_blank"> <i className="fa fa-telegram" aria-hidden="true"></i>&nbsp;</a> : ''}
                                 {item?.twitter ? <a href={item?.twitter} target="_blank"> <i className="fa fa-twitter" aria-hidden="true"></i>&nbsp;</a> : ''}
                                 {item?.discord ? <a href={item?.discord} target="_blank">
-                                    <span className="discord-img"><img src="images/discord.png" /></span></a> : ''}
+                                    <span className="discord-imgs"><img src="images/discord.png" /></span></a> : ''}
                             </p>
                         </>
                     );

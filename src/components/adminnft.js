@@ -59,7 +59,9 @@ export default class adminnft extends Component {
             isDialogOpen: false,
             SingleCategoryData: [],
             isPutonSale: 0,
-            isDialogOpen1: false
+            isDialogOpen1: false,
+            currentDate: '',
+            isDialogOpenBid: false
         }
 
         this.editDataAPI = this.editDataAPI.bind(this);
@@ -116,20 +118,29 @@ export default class adminnft extends Component {
                 text: "Category Name",
                 sortable: true
             },
-            // {
-            //     key: "is_featured",
-            //     text: "Featured",
-            //     sortable: true,
-            //     cell: (item) => {
-            //         return (
-            //             <>
+            {
+                key: "is_featured",
+                text: "Trending",
+                sortable: true,
+                cell: (item) => {
+                    return (
+                        <>
 
-            //                 <input type='checkbox' checked={item.is_featured === 0 ? '' : 'checked'} onClick={this.updateAdminNftFeature.bind(this, item.id, item.is_featured)} />
-            //             </>
-            //         )
-            //     }
+                            {/* {alert(item.expiry_date)}
+                        {alert(new Date())} */}
 
-            // },
+                            {/* {alert(item.sell_type == 2 && item.expiry_date < new Date())} */}
+                            {(item.sell_type == 2 && new Date(item.expiry_date) > new Date()) || item.sell_type == 1
+                                ?
+                                <input type='checkbox' checked={item.is_featured === 0 ? '' : 'checked'} onClick={this.updateUserNftFeature.bind(this, item.id, item.is_featured)} /> : <p title='This product is expired!!'>NA</p>
+
+                            }
+
+                        </>
+                    )
+                }
+
+            },
             {
                 key: "price",
                 text: "Price",
@@ -147,35 +158,31 @@ export default class adminnft extends Component {
                 text: "Action",
                 cell: (item) => {
                     return (
-                        <>
-                          <div className='d-flex' style={{display:"flex"}}>
+                        <> 
+                            <div className='d-flex' style={{ display: "flex", position:"relative", height:"26px", width:"216px" }}>
                                 {/* <button type="submit" onClick={this.editDataAPI.bind(this, item)} data-toggle="modal" data-target="#responsive-modal2" className="btn-primary" data-original-title="Edit"> <i class="fa fa-pencil text-inverse m-r-10"></i> </button>&nbsp; */}
-                            {item.is_active == 1 ?
-                                <button type="submit" onClick={this.hideNFTAPI.bind(this, item)} data-toggle="tooltip" data-original-title="Close" className=" btn-primary"> <i class="fa fa-minus-square m-r-10"></i> </button> :
-                                <button type="submit" onClick={this.showNFTAPI.bind(this, item)} data-toggle="tooltip" data-original-title="Close" className=" btn-primary"> <i class="fa fa-plus-square m-r-10"></i> </button>
-                            }&nbsp;
-                            {this.loginData?.id == item.owner_id ?
-                                item.is_on_sale == 1 ?
-                                    <div>
-                                       <button type='button' className='btn-primary'> <a onClick={this.cancelOrder.bind(this, item)} className='putonsale' style={{color:"#fff"}} > Cancel listing </a></button>
-                                    </div>
-                                    :
-                                    <>
-                                        <div>
-
-                                        <button className='btn-primary'> <Link to={`${config.baseUrl}editNft/` + item.id} className="btn-primary"><i class="fa fa-pencil text-inverse m-r-10"></i></Link>&nbsp;</button>
-                                            <button className='btn-primary'>   <a onClick={this.putOnSaleModelAPI.bind(this, item, 1)} className='putonsale' data-toggle="modal" data-target="#putOnSale"> Put on sale </a></button>
-                                        </div>
-                                    </>
-                                : ""}
-                            {item.sell_type == 2 ?
-                                <button
-                                    type='button' onClick={this.getBidDetailAPI.bind(this, item)} data-toggle="modal" data-target="#exampleModalCenter" className="btn-primary">
-                                    View Bid</button> : ''
-                            }
+                                {item.is_active == 1 ?
+                                    <button type="submit" onClick={this.hideNFTAPI.bind(this, item)} data-toggle="tooltip" data-original-title="Close" className=" btn-primary"> <i class="fa fa-minus-square m-r-10"></i> </button> :
+                                    <button type="submit" onClick={this.showNFTAPI.bind(this, item)} data-toggle="tooltip" data-original-title="Close" className=" btn-primary"> <i class="fa fa-plus-square m-r-10"></i> </button>
+                                }&nbsp;
+                                {this.loginData?.id == item.owner_id ?
+                                    item.is_on_sale == 1 ?
+                                            <button type='button' className='btn-primary' id='cancelid'> <a onClick={this.cancelOrder.bind(this, item)} className='putonsale' style={{ color: "#fff" }} > Cancel listing </a></button>
+                                        :
+                                        <>
+                                                <button className='btn-primary'> <Link to={`${config.baseUrl}editNft/` + item.id} className="btn-primary"><i class="fa fa-pencil text-inverse m-r-10"></i></Link>&nbsp;</button>
+                                                <button className='btn-primary' id='putonsaleid'>   <a onClick={this.putOnSaleModelAPI.bind(this, item, 1)} className='putonsale' data-toggle="modal" data-target="#putOnSale"> Put on sale </a></button>
+                                        
+                                        </>
+                                    : ""}
+                                {item.sell_type == 2 ?
+                                    <button
+                                        type='button' onClick={this.getBidDetailAPI.bind(this, item)} data-toggle="modal" data-target="#exampleModalCenter" className="btn-primary" id='viewid'>
+                                        View Bid</button> : ''
+                                }
 
 
-                          </div>
+                            </div>
                         </>
                     );
                 }
@@ -199,9 +206,31 @@ export default class adminnft extends Component {
 
     componentDidMount() {
         this.categoryList();
-        this.getItemAPI();
+        // this.getItemAPI();
         this.getAdminNFTAPI();
         this.getAdminCollection()
+        var dateToday = new Date();
+        var month = dateToday.getMonth() + 1;
+        var day = dateToday.getDate();
+        var year = dateToday.getFullYear();
+
+        if (month < 10)
+            month = '0' + month.toString();
+        if (day < 10)
+            day = '0' + day.toString();
+
+        var maxDate = year + '-' + month + '-' + day;
+
+        $('#txt-appoint_date').attr('min', maxDate);
+
+        var startDate = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
+        var array = startDate.split(' ');
+        if (array[0]) {
+            this.setState({
+                currentDate: array[0],
+                endDate: array[0]
+            })
+        }
     }
 
     async getAdminCollection() {
@@ -376,8 +405,9 @@ export default class adminnft extends Component {
     }
 
     async BidAcceptAPI(itemData) {
-        console.log(itemData);
+        console.log(itemData.token_id);
         let tokenId = itemData.token_id;
+        alert(tokenId)
         if (window.ethereum) {
 
             const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
@@ -388,7 +418,7 @@ export default class adminnft extends Component {
             try {
                 this.setState({
                     processBtn: 1,
-                    isDialogOpen: true
+                    isDialogOpenBid: true
                 })
                 let contractAddress = `${config.marketplaceContract}`
                 let from_address = accounts[0];
@@ -433,13 +463,13 @@ export default class adminnft extends Component {
                                 toast.success(response.data?.msg, {});
                                 this.setState({
                                     processBtn: 0,
-                                    isDialogOpen: false
+                                    isDialogOpenBid: false
                                 })
                             }
                             else if (response.data.success === false) {
                                 this.setState({
                                     processBtn: 0,
-                                    isDialogOpen: false
+                                    isDialogOpenBid: false
                                 })
                                 toast.error(response.data?.msg, {});
                             }
@@ -447,7 +477,7 @@ export default class adminnft extends Component {
                         .catch(err => {
                             this.setState({
                                 processBtn: 0,
-                                isDialogOpen: false
+                                isDialogOpenBid: false
                             })
                             toast.error(err.response.data?.msg, {});
                         })
@@ -456,7 +486,7 @@ export default class adminnft extends Component {
                     toast.error('Something went wrong please try again3.');
                     this.setState({
                         processBtn: 0,
-                        isDialogOpen: false
+                        isDialogOpenBid: false
                     })
                     return false;
                 }
@@ -478,7 +508,7 @@ export default class adminnft extends Component {
                 }
                 this.setState({
                     processBtn: 0,
-                    isDialogOpen: false
+                    isDialogOpenBid: false
                 })
                 return false;
             }
@@ -487,7 +517,7 @@ export default class adminnft extends Component {
             toast.error('Please Connect to MetaMask.');
             this.setState({
                 processBtn: 0,
-                isDialogOpen: false
+                isDialogOpenBid: false
             })
             return false;
         }
@@ -942,6 +972,9 @@ export default class adminnft extends Component {
                                 isDialogOpen1: false
                             })
 
+                            setTimeout(() => {
+                                window.location.reload()
+                            }, 1000);
                             // this.modalShow(0)
                             // this.getMyNftAPI(itemDetails.nftType)
                             //    toast.error('Please select start date');
@@ -1394,6 +1427,41 @@ export default class adminnft extends Component {
         }
     }
 
+
+    async updateUserNftFeature(id, featured) {
+        console.log('id', id)
+        axios({
+            method: 'post',
+            url: `${config.apiUrl}addUserNftFeatured`,
+            headers: { "Authorization": this.loginData?.Token },
+            data: { id: id, is_featured: featured === 0 ? '1' : '0' }
+        })
+            .then(result => {
+
+                if (result.data.success === true) {
+                    if (featured == 0) {
+                        toast.success('Added In Trending!!', {
+                            position: toast.POSITION.TOP_CENTER
+                        });
+                    }
+                    else if (featured == 1) {
+                        toast.error('Removed From Trending!!', {
+                            position: toast.POSITION.TOP_CENTER
+                        });
+                    }
+                    this.componentDidMount();
+
+                }
+            }).catch(err => {
+
+                // toast.error(err.response.data?.msg, {
+                //     position: toast.POSITION.TOP_CENTER, autoClose: 1500
+                // }, setTimeout(() => {
+                // }, 500));
+
+            })
+    }
+
     render() {
 
         return (
@@ -1435,7 +1503,7 @@ export default class adminnft extends Component {
               Please do not refresh page or close tab.
             </p> */}
                                             <div className='mb-3'>
-                                                <img src={`${config.imageUrl + this.state.imageData}`} width="150px" />
+                                                <img src={`${this.state.image_preview}`} width="150px" />
                                             </div>
                                             <button type='button' className='btn btn-primary' onClick={this.movePage.bind(this)}>Ok</button>
                                             {/* <div>
@@ -1463,7 +1531,30 @@ export default class adminnft extends Component {
                                                 Please do not refresh page or close tab.
                                             </p>
                                             <div>
-                                                <div className="spinner-border"></div>
+                                                <img src='img/loading.gif' style={{ width: '50px' }} />
+                                            </div>
+                                        </div>
+                                    </Dialog>
+
+                                    <Dialog
+                                        title="Please Wait..."
+                                        // icon="warning-sign"
+                                        style={{
+                                            color: '#3fa1f3',
+                                            textAlign: "center"
+                                        }}
+                                        isOpen={this.state.isDialogOpenBid}
+                                        isCloseButtonShown={false}
+                                    >
+                                        <div className="text-center">
+                                            {/* <BarLoader color="#e84747" height="2" /> */}
+                                            <br />
+                                            <h4 style={{ color: '#3fa1f3', fontSize: '16px' }}> Bid accepting in progress, Please wait for a while.</h4>
+                                            <p style={{ color: '#091f3f' }}>
+                                                Please do not refresh page or close tab.
+                                            </p>
+                                            <div>
+                                                <img src='img/loading.gif' style={{ width: '50px' }} />
                                             </div>
                                         </div>
                                     </Dialog>
@@ -1629,13 +1720,13 @@ export default class adminnft extends Component {
                                                                 <div className="col-md-6">
                                                                     <div className="form-group">
                                                                         <label className="control-label mb-10">Start Date</label>
-                                                                        <input type="date" onChange={this.handleChange1} min={new Date()} className="form-control" name="start_date" value={this.state.start_date} />
+                                                                        <input type="date" onChange={this.handleChange1} min={this.state.currentDate} id="txt-appoint_date" onkeydown="return false" className="form-control" name="start_date" value={this.state.start_date} />
                                                                     </div>
                                                                 </div>
                                                                 <div className="col-md-6">
                                                                     <div className="form-group">
                                                                         <label className="control-label mb-10">Expiry Date</label>
-                                                                        <input type="date" min={new Date()} onChange={this.handleChange1} className="form-control" name="expiry_date" value={this.state.expiry_date} />
+                                                                        <input type="date" min={this.state.currentDate} onChange={this.handleChange1} className="form-control" name="expiry_date" value={this.state.expiry_date} />
                                                                     </div>
                                                                 </div>
 
@@ -1730,9 +1821,7 @@ export default class adminnft extends Component {
                                                                     <select onChange={this.handleChange1} name='is_on_sale' value={this.state.is_on_sale} className="form-control" >
                                                                         <option value="1">Yes</option>
                                                                         <option value="0">No</option>
-                                                                        {/* {this.state.item_list1.map((item) => (
-                                                                            <option value={item.id}>{item.name}</option>
-                                                                        ))} */}
+
                                                                     </select>
                                                                 </div>
                                                             </div>
@@ -1824,8 +1913,8 @@ export default class adminnft extends Component {
                     <div className="modal-dialog" role="document">
 
                         <div className="modal-content">
-                            <div className="modal-header">
-                                <h5 className="modal-title" id="exampleModalLabel"> Put On Sale </h5>
+                            <div className="modal-header"> Put On Sale 
+                                <h5 className="modal-title" id="exampleModalLabel"></h5>
                                 <a type="button" className="close" data-dismiss="modal" style={{
                                     fontSize: '26px', marginTop: '-30px'
                                 }} aria-label="Close" onClick={this.modalShow.bind(this, 0)} >
@@ -1840,7 +1929,7 @@ export default class adminnft extends Component {
                                         {console.log(this.state.nftData)}
                                         {this.state.nftData?.sell_type === 1 ?
                                             <>
-                                            <p style={{ color: 'red' }}>List price and listing schedule can not be edited once the item is listed. You will need to cancel your listing and relist the item with the updated price and dates.</p>
+                                                <p style={{ color: 'red' }}>List price and listing schedule can not be edited once the item is listed. You will need to cancel your listing and relist the item with the updated price and dates.</p>
                                                 <h5>NFT Type : Price</h5>
                                                 <h5>Price</h5>
                                                 <input type="text" disabled value={this.state.nftData?.price} name="price" id="item_price_bid" className="form-control" placeholder="Enter Price" />
@@ -1848,7 +1937,7 @@ export default class adminnft extends Component {
                                             :
                                             this.state.nftData?.sell_type === 2 ?
                                                 <>
-                                                <p style={{ color: 'red' }}>List price and listing schedule can not be edited once the item is listed. You will need to cancel your listing and relist the item with the updated price and dates.</p>
+                                                    <p style={{ color: 'red' }}>List price and listing schedule can not be edited once the item is listed. You will need to cancel your listing and relist the item with the updated price and dates.</p>
                                                     <h5>NFT Type : Auction</h5>
                                                     <h5>Minimum bid</h5>
                                                     <input type="text" name="minimum_bid_amount" disabled value={this.state.nftData?.price} id="item_price_bid" className="form-control" placeholder="Enter Minimum Bid" />

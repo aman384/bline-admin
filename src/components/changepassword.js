@@ -62,6 +62,9 @@ export default class changePassword extends Component {
                     toast.success(result.data.msg, {
                         position: toast.POSITION.TOP_CENTER
                     });
+                    setTimeout(() => {
+                        window.location.reload()
+                    }, 1000);
                     // window.location.href = `${config.baseUrl}dashboard`
                 }
                 else if (result.data.success === false) {
@@ -144,7 +147,7 @@ export default class changePassword extends Component {
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div className="col-md-6">
+                                                    <div className="col-md-6" style={{marginLeft:'-15px'}}>
                                                         <div className="form-group">
                                                             <label className="control-label mb-10"></label>
                                                             <button type="submit" onClick={this.changePasswordAPI} className="btn btn-primary">Change Password</button>

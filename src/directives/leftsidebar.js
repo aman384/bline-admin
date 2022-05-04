@@ -101,6 +101,9 @@ export default class Leftsidebar extends Component {
 
                     </li>
                     <li>
+                        <a href={`${config.baseUrl}walletSetting`}><div className="pull-left"><i className="zmdi zmdi-settings mr-20"></i><span className="right-nav-text">Settings</span></div><div className="pull-right"><i ></i></div><div className="clearfix"></div></a>
+                    </li>
+                    <li>
                         <Link to={`${config.baseUrl}contact`}><div className="pull-left"><i className="zmdi  zmdi-accounts-list mr-20"></i><span className="right-nav-text">Contact Us</span></div><div className="pull-right"><i ></i></div><div className="clearfix"></div></Link>
 
                     </li>
@@ -157,10 +160,10 @@ export default class Leftsidebar extends Component {
                         </ul>
 
                     </li>
-                    {/* <li>
+                    <li>
                     <Link to={`${config.baseUrl}royalty`}><div className="pull-left"><i className="zmdi zmdi-balance-wallet mr-20"></i><span className="right-nav-text">Royalty Setting</span></div><div className="pull-right"><i ></i></div><div className="clearfix"></div></Link>
 
-					</li> */}
+					</li>
                 </ul>
            
                  </div>

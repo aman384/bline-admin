@@ -240,7 +240,7 @@ export default class wallet extends Component {
                                     <div className="form-group">
                                         <label for="email">Receipent ADA Address:</label>
                                         <input type="email" className="form-control" id="public_key" placeholder="0xB45F05cBC7614f50f31409Bec10e06cdFa0Bc168
-                                        " value={this.state.withdrawRecepientAddress} onChange={this.onChange} name='withdrawRecepientAddress' className="form-control" />
+                                        " value={this.state.withdrawRecepientAddress} onChange={this.onChange} name='withdrawRecepientAddress'  />
                                     </div>
 
                                 </div>
@@ -252,7 +252,7 @@ export default class wallet extends Component {
 
                                     <div className="form-group">
                                         <label for="email">Amount:</label>
-                                        <input type="text" className="form-control" id="withdrawAmount" placeholder="0.55" value={this.state.withdrawAmount} onChange={this.onChange} name='withdrawAmount' className="form-control" />
+                                        <input type="text"  id="withdrawAmount" placeholder="0.55" value={this.state.withdrawAmount} onChange={this.onChange} name='withdrawAmount' className="form-control" />
                                     </div>
 
                                 </div>

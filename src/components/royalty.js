@@ -25,84 +25,84 @@ export default class royalty extends Component {
             user_id: '',
             user_list: [],
             data: [],
-            index : 0
-           
-            
+            index: 0
+
+
         };
-        this.loginData = (!Cookies.get('loginSuccessInfinityAdmin')) ? [] : JSON.parse(Cookies.get('loginSuccessInfinityAdmin'));
+        this.loginData = (!Cookies.get('loginSuccessblineAdmin')) ? [] : JSON.parse(Cookies.get('loginSuccessblineAdmin'));
+
         // this.onChange = this.onChange.bind(this);
+
+
 
         this.columns = [
             {
-                key: '#',
-                text: 'Sr. No.',
+                key: "sn",
+                text: "#",
                 cell: (row, index) => index + 1
-              },
-            
-              {
+            },
+            {
                 key: "image",
-                text: "image",
+                text: "Image",
                 cell: (item) => {
                     return (
-                        <>
-                            
-                            {item.profile_pic === null || item.profile_pic === '' || item.profile_pic === undefined 
-                             ? 
-                             <img src= 'images/noimage.png' className="product-img"/> 
-                             
-                             :
-                             <img src={`${config.imageUrl1}${item.profile_pic}`} className="product-img"/> }
-                           
-                        </>
+                        <Link to={`${config.baseUrl}nftDetails/` + item.item_id}>
+                            {item.file_type == 'image' ?
+                                <div className="image-circle">
+                                    <img src={`${config.imageUrl}` + item.image} width="70px" />
+                                </div>
+                                :
+                                <video muted autoPlay width="70px" height="70px" controls>
+                                    <source src={`${config.imageUrl}${item.image}`} type="video/mp4" />
+                                </video>
+                            }
+                        </Link>
                     );
                 }
             },
-            {
-                key: "full_name",
-                text: "full name",
-                sortable: true
-            },
-            {
-                key: "email",
-                text: "email",
-                sortable: true
-            },
-            
-            {
-                key: "payout_address",
-                text: "Payout Address",
-                sortable: true
-              
-            },
-            {
-                key: "royalty_amount",
-                text: "Royalty Amount",
-                sortable: true,
-                cell: (item) => {
-                return (
-                <>
-                    <span>${parseFloat(item.royalty_amount).toFixed(2)}</span>
-                    </>
-                )
-                }
-            },
-      
 
             {
-                key: "Action",
-                text: "Action",
+                key: "item_name",
+                text: "Title",
+                sortable: true,
                 cell: (item) => {
                     return (
-                        <>
-                         
-                    <button type="submit" className="btn btn-success">Payment</button>
-                           
-                        </>
+                        <Link to={`${config.baseUrl}nftDetails/` + item.item_id}>
+                            {item.item_name}
+                        </Link>
+                    )
+                }
+            },
+
+            {
+                key: "trxType",
+                text: "Type",
+                sortable: true
+            },
+
+            
+
+            {
+                key: "price",
+                text: "Amount",
+                cell: (item) => {
+                    return (
+                        item.price + `${item.blockchainType == 1 ? ' ETH' : ' MATIC'}`
                     );
                 }
             },
-           
-          
+
+            {
+                key: "nft_datetime",
+                text: "Created Date",
+                cell: (item) => {
+                    return (
+                        item.nft_datetime
+                    );
+                }
+            }
+
+
         ];
 
         this.config = {
@@ -114,16 +114,17 @@ export default class royalty extends Component {
             button: {
                 excel: false,
                 print: false
+
             }
-        } 
-
-
         }
 
-        
+
+    }
+
+
 
     componentDidMount() {
-        if (!Cookies.get('loginSuccessInfinityAdmin')) {
+        if (!Cookies.get('loginSuccessblineAdmin')) {
             window.location.href = `${config.baseUrl}`
             return false;
         }
@@ -139,25 +140,30 @@ export default class royalty extends Component {
     //     }, () => {
     //         this.userList();
     //     });
-  
+
     // };
 
-    
 
-    
+
+
     async userList() {
-       
-        await axios.get(`${config.apiUrl}getRoyaltyList`, {},)
+
+        await axios({
+            method: 'post',
+            url: `${config.apiUrl}getUserTransactions`,
+            data: { "user_id": this.loginData.data.id }
+            // data: { "user_id": 270 }
+        })
             .then(result => {
                 const data = result.data;
                 // const slice = data.slice(this.state.offset, this.state.offset + this.state.perPage)
-               
-                
+
+
                 if (result.data.success === true) {
                     this.setState({
                         user_list: result.data.response,
                         pageCount: Math.ceil(data.length / this.state.perPage),
-                                 
+
                     })
 
 
@@ -173,9 +179,9 @@ export default class royalty extends Component {
     }
 
     // editDataAPI(id){
-  
+
     //     this.setState({
-        
+
     //      first_name : id.first_name,
     //      last_name : id.last_name,
     //      email : id.email,
@@ -187,10 +193,10 @@ export default class royalty extends Component {
     //      update_id:id.id,
     //      updateform : "123"     
     //    }); 
-     
+
     // }
 
-    
+
     updateApprovedAPI = (id) => {
         confirmAlert({
             title: 'Confirm to submit',
@@ -199,22 +205,22 @@ export default class royalty extends Component {
                 {
                     label: 'Yes',
                     onClick: () =>
-                    axios({
-                        method: 'post',
-                        url: `${config.apiUrl}updateTelentForApproved`,
-                        data: { 'email': id.email, 'user_id': id.id }
-                     })
-                   
-                        .then((res) => {
-                            toast.success(res.data.msg, {
-                                position: toast.POSITION.TOP_CENTER
-                            });
-                            this.componentDidMount()
-                        }).catch((error) => {
-                            toast.danger(error.data.msg, {
-                                position: toast.POSITION.TOP_CENTER
-                            });
+                        axios({
+                            method: 'post',
+                            url: `${config.apiUrl}updateTelentForApproved`,
+                            data: { 'email': id.email, 'user_id': id.id }
                         })
+
+                            .then((res) => {
+                                toast.success(res.data.msg, {
+                                    position: toast.POSITION.TOP_CENTER
+                                });
+                                this.componentDidMount()
+                            }).catch((error) => {
+                                toast.danger(error.data.msg, {
+                                    position: toast.POSITION.TOP_CENTER
+                                });
+                            })
                 },
                 {
                     label: 'No',
@@ -222,7 +228,7 @@ export default class royalty extends Component {
             ]
         });
     }
-  
+
     updateRejectAPI = (id) => {
         confirmAlert({
             title: 'Confirm to submit',
@@ -231,22 +237,22 @@ export default class royalty extends Component {
                 {
                     label: 'Yes',
                     onClick: () =>
-                    axios({
-                        method: 'post',
-                        url: `${config.apiUrl}updateTelentForReject`,
-                        data: {  'email': id.email, 'user_id': id.id }
-                     })
-                   
-                        .then((res) => {
-                            toast.success(res.data.msg, {
-                                position: toast.POSITION.TOP_CENTER
-                            });
-                            this.componentDidMount()
-                        }).catch((error) => {
-                            toast.danger(error.data.msg, {
-                                position: toast.POSITION.TOP_CENTER
-                            });
+                        axios({
+                            method: 'post',
+                            url: `${config.apiUrl}updateTelentForReject`,
+                            data: { 'email': id.email, 'user_id': id.id }
                         })
+
+                            .then((res) => {
+                                toast.success(res.data.msg, {
+                                    position: toast.POSITION.TOP_CENTER
+                                });
+                                this.componentDidMount()
+                            }).catch((error) => {
+                                toast.danger(error.data.msg, {
+                                    position: toast.POSITION.TOP_CENTER
+                                });
+                            })
                 },
                 {
                     label: 'No',
@@ -255,9 +261,9 @@ export default class royalty extends Component {
         });
     }
 
-    
+
     async deleteUser(id) {
-        
+
         confirmAlert({
             title: 'Confirm to submit',
             message: 'Are you sure to delete this User..',
@@ -265,36 +271,38 @@ export default class royalty extends Component {
                 {
                     label: 'Yes',
                     onClick: () =>
-                    axios({
-                        method: 'post',
-                        url: `${config.apiUrl}deleteuser`,
-                        headers: { "Authorization": this.loginData?.Token },
-                        data: {'email':this.loginData?.data.user_email,
-                        id :  id.id}
-                     })
-          
-                .then(result => {
+                        axios({
+                            method: 'post',
+                            url: `${config.apiUrl}deleteuser`,
+                            headers: { "Authorization": this.loginData?.Token },
+                            data: {
+                                'email': this.loginData?.data.user_email,
+                                id: id.id
+                            }
+                        })
 
-                    toast.success(result.data.msg, {
-                        position: toast.POSITION.TOP_CENTER
-                                                     });
-                                                     this.userList();
-                                                 }).catch((error) => {
-                                                    toast.danger(error.data.msg, {
-                                                        position: toast.POSITION.TOP_CENTER
-                                                    });
-                                                 })
-                                         },
-             {
-                 label: 'No',
-             }
-         ]
-         });
-         }
+                            .then(result => {
+
+                                toast.success(result.data.msg, {
+                                    position: toast.POSITION.TOP_CENTER
+                                });
+                                this.userList();
+                            }).catch((error) => {
+                                toast.danger(error.data.msg, {
+                                    position: toast.POSITION.TOP_CENTER
+                                });
+                            })
+                },
+                {
+                    label: 'No',
+                }
+            ]
+        });
+    }
 
 
 
-   
+
 
 
 
@@ -491,7 +499,7 @@ export default class royalty extends Component {
                                                                         <li className="self mb-10">
                                                                             <div className="self-msg-wrap">
                                                                                 <div className="msg block pull-right"> Oh, hi Sarah I'm have got a new job now and is going great.
-																			<div className="msg-per-detail text-right">
+                                                                                    <div className="msg-per-detail text-right">
                                                                                         <span className="msg-time txt-grey">2:31 pm</span>
                                                                                     </div>
                                                                                 </div>
@@ -501,7 +509,7 @@ export default class royalty extends Component {
                                                                         <li className="self">
                                                                             <div className="self-msg-wrap">
                                                                                 <div className="msg block pull-right">  How about you?
-																			<div className="msg-per-detail text-right">
+                                                                                    <div className="msg-per-detail text-right">
                                                                                         <span className="msg-time txt-grey">2:31 pm</span>
                                                                                     </div>
                                                                                 </div>
@@ -827,12 +835,12 @@ export default class royalty extends Component {
                             {/* <!-- /Title --> */}
 
                             {/* <!-- Row --> */}
-                            <div id="responsive-modal1" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style={{display: "none"}}>
-											<div class="modal-dialog">
-												<div class="modal-content">
-													
-													<div class="modal-body">
-                                                    <div className="form-wrap">
+                            <div id="responsive-modal1" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style={{ display: "none" }}>
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+
+                                        <div class="modal-body">
+                                            <div className="form-wrap">
                                                 <form action="#">
                                                     <h6 className="txt-dark capitalize-font"><i className="zmdi zmdi-info-outline mr-10"></i>about Product</h6>
                                                     <hr className="light-grey-hr" />
@@ -840,149 +848,149 @@ export default class royalty extends Component {
                                                         <div className="col-md-6">
                                                             <div className="form-group">
                                                                 <label className="control-label mb-10">Item Name</label>
-                                                                <input type="text" onChange={this.handleChange1} name="item_name" className="form-control" placeholder="Item Name"  value={this.state.item_name} />
+                                                                <input type="text" onChange={this.handleChange1} name="item_name" className="form-control" placeholder="Item Name" value={this.state.item_name} />
                                                             </div>
                                                         </div>
                                                         <div className="col-md-6">
                                                             <div className="form-group">
                                                                 <label className="control-label mb-10">Description</label>
-                                                                <input type="text" onChange={this.handleChange1} name="description" className="form-control" placeholder="Description"  value={this.state.description} />
+                                                                <input type="text" onChange={this.handleChange1} name="description" className="form-control" placeholder="Description" value={this.state.description} />
                                                             </div>
                                                         </div>
                                                         <div className="col-md-6">
                                                             <div className="form-group">
                                                                 <label className="control-label mb-10">Image</label>
-                                                                <input type="file" accept=".jpg,.jpeg,.png" onChange={this.handleImagePreview}  className="form-control" placeholder="Image File"   />
+                                                                <input type="file" accept=".jpg,.jpeg,.png" onChange={this.handleImagePreview} className="form-control" placeholder="Image File" />
                                                             </div>
                                                         </div>
                                                         <div className="col-md-6">
                                                             <div className="form-group">
                                                                 <label className="control-label mb-10">Owner</label>
-                                                                <input type="text" onChange={this.handleChange1} name="owner" className="form-control" placeholder="Owner Name"  value={this.state.owner} />
+                                                                <input type="text" onChange={this.handleChange1} name="owner" className="form-control" placeholder="Owner Name" value={this.state.owner} />
                                                             </div>
-                                                        </div> 
+                                                        </div>
                                                         <div className="col-md-6">
-                                                             
-                                 <div className="form-group">
-                                    <label className="control-label mb-10">Select Category</label>
-                                    <div className="customSelectHolder">
-                                    
-                                    <select name="item_category_id"  class="form-control  basic">
-                                       <option selected="selected" value="">Select Category</option>
-                                       {/* {this.state.category_list.map(item=>(
+
+                                                            <div className="form-group">
+                                                                <label className="control-label mb-10">Select Category</label>
+                                                                <div className="customSelectHolder">
+
+                                                                    <select name="item_category_id" class="form-control  basic">
+                                                                        <option selected="selected" value="">Select Category</option>
+                                                                        {/* {this.state.category_list.map(item=>(
                                        <option value={item.id}>{item.name}</option>
                                           ))} */}
-                                             </select>
-                                    </div>
-                                 </div>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
                                                         </div>
-                                                       
+
                                                         <div className="col-md-6">
                                                             <div className="form-group">
                                                                 <label className="control-label mb-10">Price</label>
-                                                                <input type="text" onChange={this.handleChange1} name="price" className="form-control" placeholder="Price"  value={this.state.price} />
+                                                                <input type="text" onChange={this.handleChange1} name="price" className="form-control" placeholder="Price" value={this.state.price} />
                                                             </div>
                                                         </div>
 
-                                
-                                                        
-           
-                                     <div className="col-md-6">
-                                     <div className="form-group">
-                                    <label className="control-label mb-10">Sell Type</label>
-                                    <div className="customSelectHolder">
-                                    <select class="form-control  basic" name="sell_type" onChange={this.handleChange1} value={this.state.sell_type} >
-                                   
-                                    <option selected="selected" value="">Select Options</option>
-                                    
-                                        <option value="1">Price</option>
-                                       <option value="2">Auction</option>
-                                          
 
-                                    </select>
 
-                                     </div>
-                                     </div>
-                                  
-                                     </div>  
-                                     <div className="col-md-6">
-                                     <div className="form-group">
-                                    <label className="control-label mb-10">Edition Type</label>
-                                    <div className="customSelectHolder">
-                                    <select class="form-control  basic" name="edition_type" onChange={this.handleChange1} value={this.state.edition_type} >
-                                   
-                                    <option selected="selected" value="">Select Options</option>
-                                    
-                                        <option value="1">Limited Edition</option>
-                                       <option value="2">Open Edition</option>
-                                          
 
-                                    </select>
+                                                        <div className="col-md-6">
+                                                            <div className="form-group">
+                                                                <label className="control-label mb-10">Sell Type</label>
+                                                                <div className="customSelectHolder">
+                                                                    <select class="form-control  basic" name="sell_type" onChange={this.handleChange1} value={this.state.sell_type} >
 
-                                     </div>
-                                     </div>
-                                  
-                                     </div> 
-                                     <div className="col-md-6">
-                                     <div className="form-group">
-                                     <label className="control-label mb-10">Expiry Date</label>
-                                      <input type="date" onChange={this.handleChange1} className="form-control"  name="expiry_date"  value={this.state.expiry_date} />
-                                     </div>
-                                     </div> 
-                                     <div className="col-md-6">
+                                                                        <option selected="selected" value="">Select Options</option>
+
+                                                                        <option value="1">Price</option>
+                                                                        <option value="2">Auction</option>
+
+
+                                                                    </select>
+
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                        <div className="col-md-6">
+                                                            <div className="form-group">
+                                                                <label className="control-label mb-10">Edition Type</label>
+                                                                <div className="customSelectHolder">
+                                                                    <select class="form-control  basic" name="edition_type" onChange={this.handleChange1} value={this.state.edition_type} >
+
+                                                                        <option selected="selected" value="">Select Options</option>
+
+                                                                        <option value="1">Limited Edition</option>
+                                                                        <option value="2">Open Edition</option>
+
+
+                                                                    </select>
+
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                        <div className="col-md-6">
+                                                            <div className="form-group">
+                                                                <label className="control-label mb-10">Expiry Date</label>
+                                                                <input type="date" onChange={this.handleChange1} className="form-control" name="expiry_date" value={this.state.expiry_date} />
+                                                            </div>
+                                                        </div>
+                                                        <div className="col-md-6">
                                                             <div className="form-group">
                                                                 <label className="control-label mb-10">Quantity</label>
                                                                 <input type="text" onChange={this.handleChange1}
-                                                                disabled={this.state.edition_type === '2'}
-                                                                 name="quantity" className="form-control" placeholder=""  value={this.state.quantity} />
+                                                                    disabled={this.state.edition_type === '2'}
+                                                                    name="quantity" className="form-control" placeholder="" value={this.state.quantity} />
                                                             </div>
-                                                        </div> 
+                                                        </div>
                                                         <div className="col-md-12">
-                                                        <label className="control-label mb-10">
-                                                        <input className="input-checkbox100" id="ckb1" type="checkbox" name="end_start_date" onChange={this.handleChange1}/> &nbsp;
-                                                        
-                                                        click here to create Upcoming NFTs </label>
-                                                            
+                                                            <label className="control-label mb-10">
+                                                                <input className="input-checkbox100" id="ckb1" type="checkbox" name="end_start_date" onChange={this.handleChange1} /> &nbsp;
+
+                                                                click here to create Upcoming NFTs </label>
+
                                                         </div>
-                                                        {(this.state.dateShow===1)?
-                                                        <>
-                                                        <div className="col-md-6">
-                                                            <div className="form-group">
-                                                                <label className="control-label mb-10">Start Date</label>
-                                                                <input type="date" onChange={this.handleChange1} className="form-control"  name="start_date"  value={this.state.start_date} />
-                                                            </div>
-                                                        </div>
-                                                        {/* <div className="col-md-6">
+                                                        {(this.state.dateShow === 1) ?
+                                                            <>
+                                                                <div className="col-md-6">
+                                                                    <div className="form-group">
+                                                                        <label className="control-label mb-10">Start Date</label>
+                                                                        <input type="date" onChange={this.handleChange1} className="form-control" name="start_date" value={this.state.start_date} />
+                                                                    </div>
+                                                                </div>
+                                                                {/* <div className="col-md-6">
                                                             <div className="form-group">
                                                                 <label className="control-label mb-10">End Date</label>
                                                                 <input type="date" onChange={this.handleChange1} name="end_date" className="form-control" placeholder="End Date"  value={this.state.end_date} />
                                                                 
                                                             </div>
                                                         </div> */}
-                                                        </>
-                                                        :''}
+                                                            </>
+                                                            : ''}
 
 
-                                     </div>                
-                                                   
-                                     <div className="form-actions">
-                                 {/* <button type="submit" onClick={this.handleSubmit} className="btn btn-success btn-icon left-icon mr-10 pull-left"> <i className="fa fa-check"></i> <span>save</span></button> */}
-                                     <div className="clearfix"></div>
-                                     </div>
+                                                    </div>
+
+                                                    <div className="form-actions">
+                                                        {/* <button type="submit" onClick={this.handleSubmit} className="btn btn-success btn-icon left-icon mr-10 pull-left"> <i className="fa fa-check"></i> <span>save</span></button> */}
+                                                        <div className="clearfix"></div>
+                                                    </div>
                                                 </form>
                                             </div>
-													</div>
-													<div class="modal-footer pt-0">
-														<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                                        
-                {/* <button type='button' onClick={this.updateDataAPI.bind(this)} className="btn btn-success btn-icon left-icon mr-10 pull-left">Update</button> */}
-                
-                <button type='submit'  onClick={this.handleSubmit}   data-dismiss="modal" className="btn btn-primary">Add </button>
-                
-													</div>
-												</div>
-											</div>
-										</div>
+                                        </div>
+                                        <div class="modal-footer pt-0">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+                                            {/* <button type='button' onClick={this.updateDataAPI.bind(this)} className="btn btn-success btn-icon left-icon mr-10 pull-left">Update</button> */}
+
+                                            <button type='submit' onClick={this.handleSubmit} data-dismiss="modal" className="btn btn-primary">Add </button>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
 
                             <div className="row">
@@ -992,16 +1000,16 @@ export default class royalty extends Component {
                                             <div className="panel-body">
                                                 <div className="form-wrap">
                                                     <form action="#">
-                                                       
+
                                                         {/* <hr className="light-grey-hr" /> */}
                                                         <div className="row">
-                                                          
+
                                                         </div>
-                                                       
+
 
 
                                                         <div className="form-actions">
-                                                           
+
                                                             <div className="clearfix"></div>
                                                         </div>
                                                     </form>
@@ -1075,10 +1083,10 @@ export default class royalty extends Component {
                                                         </table> */}
 
                                                         <ReactDatatable
-                                               config={this.config}
-                                               records={this.state.user_list}
-                                             columns={this.columns}
-                                                                   /> 
+                                                            config={this.config}
+                                                            records={this.state.user_list}
+                                                            columns={this.columns}
+                                                        />
 
                                                     </div>
 
@@ -1087,7 +1095,7 @@ export default class royalty extends Component {
                                         </div>
                                     </div>
                                 </div>
-                               
+
 
                             </div>
                             {/* <!-- /Row --> */}

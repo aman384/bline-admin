@@ -156,7 +156,7 @@ export default class userDetails extends Component {
                                 {item?.telegram ? <a href={item?.telegram} target="_blank"> <i className="fa fa-telegram" aria-hidden="true"></i>&nbsp;</a> : ''}
                                 {item?.twitter ? <a href={item?.twitter} target="_blank"> <i className="fa fa-twitter" aria-hidden="true"></i>&nbsp;</a> : ''}
                                 {item?.discord ? <a href={item?.discord} target="_blank">
-                                    <span className="discord-img"><img src="images/discord.png" /></span></a> : ''}
+                                    <span className="discord-imgs"><img src="images/discord.png" /></span></a> : ''}
                             </p>                        </td>
                     );
                 }
@@ -332,7 +332,7 @@ export default class userDetails extends Component {
                 cell: (item) => {
                     return (
                         <>
-                            <a href={`${config.redirectPath}/nftDetails/${item.item_id}`} target="_blank" >
+                            <a href={`${config.redirectUrl}nftDetails/${item.item_id}`} target="_blank" >
                                 {item.name}
                             </a>
 
@@ -505,7 +505,7 @@ export default class userDetails extends Component {
 
         await axios({
             method: 'post',
-            url: `${config.apiUrl}getUserItem`,
+            url: `${config.apiUrl}getUserCreatedNft`,
             headers: { "Authorization": this.loginData?.Token },
             data: { user_id: this.userid, 'is_admin': this.loginData.data.is_admin, "login_user_id": 0, "user_collection_id": 0, "is_trending": 0, "recent": 0, "limit": 0 }
         })
@@ -625,7 +625,7 @@ export default class userDetails extends Component {
                                                     <div className="col-md-4 col-4">
                                                         <p>Social Icons:</p>
                                                     </div>
-                                                    <div className="col-md-6 col-6">
+                                                    <div className="col-md-8 col-8">
                                                         <p className='circle-icon'>{this.state.userDetailData?.facebook === '' && this.state.userDetailData?.insta === '' && this.state.userDetailData?.telegram === '' && this.state.userDetailData?.twitter === '' && this.state.userDetailData?.discord === '' ? 'N/A' :
 
                                                             this.state.userDetailData?.facebook ? <a href={this.state.userDetailData?.facebook} target="_blank"> <i className="fa fa-facebook" aria-hidden="true"></i>&nbsp;</a> : ''}
@@ -633,7 +633,7 @@ export default class userDetails extends Component {
                                                             {this.state.userDetailData?.telegram ? <a href={this.state.userDetailData?.telegram} target="_blank"> <i className="fa fa-telegram" aria-hidden="true"></i>&nbsp;</a> : ''}
                                                             {this.state.userDetailData?.twitter ? <a href={this.state.userDetailData?.twitter} target="_blank"> <i className="fa fa-twitter" aria-hidden="true"></i>&nbsp;</a> : ''}
                                                             {this.state.userDetailData?.discord ? <a href={this.state.userDetailData?.discord} target="_blank">
-                                                                <span className="discord-img"><img src="images/discord2.png" /></span></a> : ''}
+                                                                <span className="discord-imgs"><img src="images/discord.png" /></span></a> : ''}
                                                         </p>
                                                     </div>
                                                 </div>
@@ -641,7 +641,7 @@ export default class userDetails extends Component {
                                                     <div className="col-md-4 col-4">
                                                         <p>Profile Image:</p>
                                                     </div>
-                                                    <div className="col-md-6 col-6">
+                                                    <div className="col-md-8 col-8">
                                                         {this.state.userDetailData?.profile_pic ?
                                                             <a href={`${config.imageUrl1}${this.state.userDetailData?.profile_pic}`} target="_blank">
                                                                 <p><img src={`${config.imageUrl1}${this.state.userDetailData?.profile_pic}`} style={{ width: "100px", height: "100px" }} /> </p>
@@ -656,7 +656,7 @@ export default class userDetails extends Component {
                                             <div className="col-md-4 col-4">
                                                 <p>Banner Image:</p>
                                             </div>
-                                            <div className="col-md-6 col-6">
+                                            <div className="col-md-8 col-8">
                                                 <div className='bnr_img'>
                                                 {this.state.userDetailData?.banner ?
                                                     <a href={`${config.imageUrl1}${this.state.userDetailData?.banner}`} target="_blank">

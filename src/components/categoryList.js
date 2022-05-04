@@ -23,7 +23,7 @@ export default class categorylist extends Component {
             getCategoryData: ''
         };
         this.deleteCategory = this.deleteCategory.bind(this);
-      
+
         this.onChange = this.nftUserDetail.bind(this)
         this.updateNftUser = this.updateNftUser.bind(this)
 
@@ -133,41 +133,48 @@ export default class categorylist extends Component {
     }
 
     async deleteCategory(id) {
-        confirmAlert({
-            title: 'Confirm to submit',
-            message: 'Are you sure to delete this Games Category..',
-            buttons: [
-                {
-                    label: 'Yes',
-                    onClick: () =>
+        if (id.nft_count == 0) {
+            confirmAlert({
+                title: 'Confirm to submit',
+                message: 'Are you sure to delete this Games Category..',
+                buttons: [
+                    {
+                        label: 'Yes',
+                        onClick: () =>
 
-                        axios({
-                            method: 'post',
-                            url: `${config.apiUrl}deletecategory`,
-                            headers: { "Authorization": this.loginData?.Token },
-                            data: { 'email': this.loginData?.data.user_email, id: id.id }
-                        })
-                           
-                            .then(result => {
-
-                                toast.success(result.data.msg, {
-                                    position: toast.POSITION.TOP_CENTER
-                                });
-                                this.categoryList()
-                            }).catch(err => {
-                                toast.error(err.response.data?.msg, {
-                                    position: toast.POSITION.TOP_CENTER,
-
-                                }, setTimeout(() => {
-
-                                }, 500));
+                            axios({
+                                method: 'post',
+                                url: `${config.apiUrl}deletecategory`,
+                                headers: { "Authorization": this.loginData?.Token },
+                                data: { 'email': this.loginData?.data.user_email, id: id.id }
                             })
-                },
-                {
-                    label: 'No',
-                }
-            ]
-        });
+
+                                .then(result => {
+
+                                    toast.success(result.data.msg, {
+                                        position: toast.POSITION.TOP_CENTER
+                                    });
+                                    this.categoryList()
+                                }).catch(err => {
+                                    toast.error(err.response.data?.msg, {
+                                        position: toast.POSITION.TOP_CENTER,
+
+                                    }, setTimeout(() => {
+
+                                    }, 500));
+                                })
+                    },
+                    {
+                        label: 'No',
+                    }
+                ]
+            });
+        }
+        else {
+            toast.error('You cant delete this Games Category because of nft existing', {
+                position: toast.POSITION.TOP_CENTER
+            });
+        }
     }
 
     async updateNftUser(e) {
@@ -220,13 +227,13 @@ export default class categorylist extends Component {
                     toast.success('Games Category Added!!', {
                         position: toast.POSITION.TOP_CENTER,
                     }, setTimeout(() => {
-                       
-                    },));
+
+                    }));
                     this.categoryList();
                     this.setstate({
                         name: ''
                     })
-                   
+
 
                 }
             }).catch((error) => {
@@ -252,7 +259,7 @@ export default class categorylist extends Component {
                 <ToastContainer />
                 <div className="wrapper theme-6-active pimary-color-green">
 
-                   
+
                     <Header />
 
                     <Leftsidebar />
@@ -261,17 +268,17 @@ export default class categorylist extends Component {
                         <ul className="right-sidebar">
                             <li>
                                 <div className="tab-struct custom-tab-1">
-                              
+
                                     <div className="tab-content" id="right_sidebar_content">
                                         <div id="chat_tab" className="tab-pane fade active in" role="tabpanel">
                                             <div className="chat-cmplt-wrap">
                                                 <div className="chat-box-wrap">
-                                                   
+
                                                     <div id="chat_list_scroll">
                                                         <div className="nicescroll-bar">
                                                             <ul className="chat-list-wrap">
                                                                 <li className="chat-list">
-                                                                    
+
                                                                 </li>
                                                             </ul>
                                                         </div>
@@ -279,15 +286,15 @@ export default class categorylist extends Component {
                                                 </div>
                                                 <div className="recent-chat-box-wrap">
                                                     <div className="recent-chat-wrap">
-                                                        
+
                                                         <div className="panel-wrapper collapse in">
                                                             <div className="panel-body pa-0">
                                                                 <div className="chat-content">
                                                                     <ul className="nicescroll-bar pt-20">
-                                                                       
+
                                                                     </ul>
                                                                 </div>
-                                                              
+
                                                             </div>
                                                         </div>
                                                     </div>
@@ -297,17 +304,17 @@ export default class categorylist extends Component {
 
                                         <div id="messages_tab" className="tab-pane fade" role="tabpanel">
                                             <div className="message-box-wrap">
-                                               
+
                                                 <div className="set-height-wrap">
-                                                   
+
                                                 </div>
                                             </div>
                                         </div>
                                         <div id="todo_tab" className="tab-pane fade" role="tabpanel">
                                             <div className="todo-box-wrap">
-                                               
+
                                                 <div className="set-height-wrap">
-                                                 
+
                                                 </div>
                                             </div>
                                         </div>
@@ -324,8 +331,8 @@ export default class categorylist extends Component {
                                 <div className="col-lg-3 col-md-4 col-sm-4 col-xs-12">
                                     <h5 className="txt-dark">Games Category</h5>
                                 </div>
-                               
-                              
+
+
                             </div>
 
                             <div className="row">
@@ -336,11 +343,11 @@ export default class categorylist extends Component {
                                                 <div className="form-wrap">
                                                     <form action="#">
                                                         <div className="row">
-                                                          
+
 
 
                                                         </div>
-                                                      
+
 
                                                         <div className="form-actions">
 
@@ -379,15 +386,15 @@ export default class categorylist extends Component {
                                                         </table>
                                                     </div>
 
-                                                   
+
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                   
+
                                 </div>
                             </div>
-                          
+
                             <div id="responsive-modal1" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style={{ display: "none" }}>
                                 <div class="modal-dialog">
                                     <div class="modal-content">
@@ -396,7 +403,7 @@ export default class categorylist extends Component {
                                             <form>
 
                                                 <div>
-                                                   
+
 
 
                                                     <div className="form-group mb-0">
@@ -425,7 +432,7 @@ export default class categorylist extends Component {
 
                                                 <div>
                                                     <div className="form-group mb-0">
-                                                       
+
                                                     </div>
 
 

@@ -80,16 +80,17 @@ export default class userlist extends Component {
                 cell: (item) => {
                     return (
                         <td nowrap="nowrap">
-                            <span>
+                        <span>
 
-                            </span>
-                            <>
-                                <a style={{ cursor: 'pointer' }} onClick={e => window.open(`https:/ropsten.etherscan.io/address/${item.address}`)} target="_blank" >
-                                    <p title={item.address}>{item.address == null ? '' : item.address.toString().substring(0, 8) + '...' + item.address.toString().substr(item.address.length - 8)}</p>
-                                </a>
+                        </span>
+                        <>
+                            <a href={config.blockchinUrl + item.address} target="_blank" >
+                                <p title={item.address}>{item.address == null ? '' : item.address.toString().substring(0, 8) + '...' + item.address.toString().substr(item.address.length - 8)}</p>
+                            </a>
 
-                            </>
-                        </td>
+                        </>
+                    </td>
+                        
                     )
                 }
             },

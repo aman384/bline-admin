@@ -81,14 +81,21 @@ export default class product extends Component {
                 cell: (item) => {
                     return (
                         <>
-                            {item.image === null || item.image === '' || item.image === undefined
+                            {item.file_type == 'image' ?
+                                <img className="product-img" src={`${config.imageUrl}${item.image}`} width="150px" />
+                                :
+                                <video width="80" height="80" controls>
+                                    <source className="product-img" src={`${config.imageUrl}${item.image}`} type="video/mp4" />
+                                </video>
+                            }
+                            {/* {item.image === null || item.image === '' || item.image === undefined
                                 ?
                                 <img src='images/noimage.png' className="product-img" />
                                 :
                                 <a href={`${config.imageUrl}${item.image}`} target="_balnk">
                                     <img src={`${config.imageUrl}${item.image}`} className="product-img" />
                                 </a>
-                            }
+                            } */}
 
 
                         </>
@@ -153,7 +160,13 @@ export default class product extends Component {
                     return (
                         <>
 
-                            <input type='checkbox' checked={item.is_featured === 0 ? '' : 'checked'} onClick={this.updateUserNftFeature.bind(this, item.id, item.is_featured)} />
+                            {(item.sell_type == 2 && new Date(item.expiry_date) > new Date()) || item.sell_type == 1
+                                ?
+                                <input type='checkbox' checked={item.is_featured === 0 ? '' : 'checked'} onClick={this.updateUserNftFeature.bind(this, item.id, item.is_featured)} /> : <p title='This product is expired!!'>NA</p>
+
+                            }
+
+
                         </>
                     )
                 }
@@ -286,7 +299,7 @@ export default class product extends Component {
             .then(response => {
                 if (response.data.success === true) {
                     this.setState({
-                        item_list: response.data.response
+                        item_list: response.data.response.filter(item => item.creator_id != 1)
                     })
                 }
 

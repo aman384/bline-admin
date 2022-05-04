@@ -152,7 +152,7 @@ export default class gamescategory extends Component {
     }
 
     async deleteCategory(id) {
-        console.log(id)
+        if (id.nft_count == 0) {
         confirmAlert({
             title: 'Confirm to submit',
             message: 'Are you sure to delete this Games..',
@@ -188,6 +188,12 @@ export default class gamescategory extends Component {
                 }
             ]
         });
+    }
+    else {
+        toast.error('You cant delete this Games because of nft existing', {
+            position: toast.POSITION.TOP_CENTER
+        });
+    }
     }
 
     async updateNftUser(e) {

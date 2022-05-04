@@ -73,6 +73,8 @@ export default class editNft extends Component {
         this.getCategoryAPI()
         this.getUserCollectionAPI()
         this.getNftDetailsAPI()
+
+        
     }
 
     async getNftDetailsAPI() {
@@ -356,9 +358,9 @@ export default class editNft extends Component {
                     if (result.data.success === true) {
                         toast.success(result.data.msg, {
                         });
-                        // setTimeout(() => {
-                        //     window.location.href = `${config.baseUrl}adminnft`
-                        // }, 2000);
+                        setTimeout(() => {
+                            window.location.href = `${config.baseUrl}adminnft`
+                        }, 2000);
                     } else {
                         toast.error(result.data.msg, {
 
@@ -466,7 +468,7 @@ export default class editNft extends Component {
                                                             </div>
                                                           <div className='form-group'>
                                                                 <h5>Royalties</h5>
-                                                            <input onKeyPress={(event) => { if (!/^\d*[.]?\d{0,1}$/.test(event.key)) { event.preventDefault(); } }} type="text" value={this.state.nftData?.royalty_percent} onChange={this.handleChange} name="royalty_percent" id="item_royalties" className="form-control" placeholder="suggested: 0%, 5%, 10%, 20%. Maximum is 25%" />
+                                                            <input onKeyPress={(event) => { if (!/^\d*[.]?\d{0,1}$/.test(event.key)) { event.preventDefault(); } }} disabled={this.state.nftData?.is_minted == 1} type="text" value={this.state.nftData?.royalty_percent} onChange={this.handleChange} name="royalty_percent" id="item_royalties" className="form-control" placeholder="suggested: 0%, 5%, 10%, 20%. Maximum is 25%" />
                                                           </div>
                                                         <div className='form-group'>
                                                         <h5>Select sale method</h5>
@@ -513,7 +515,7 @@ export default class editNft extends Component {
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                            <div className="form-group">
+                                                            <div className="form-group" style={{display:'none'}}>
                                                                 <h5 className="control-label mb-10">Trending Status</h5>
                                                                 <div className="customSelectHolder">
 
@@ -524,7 +526,7 @@ export default class editNft extends Component {
                                                                 </div>
                                                             </div>
 
-                                                            <div className="form-group">
+                                                            <div className="form-group" style={{display:'none'}}>
                                                                 <h5 className="control-label mb-10">Sell / Not on sell</h5>
                                                                 <div className="customSelectHolder">
 

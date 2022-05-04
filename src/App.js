@@ -49,6 +49,7 @@ import gamescategory from './components/gamescategory'
 import bannerImage from './components/bannerImage';
 import faqs from './components/faqs';
 import editNft from './components/editNft'
+import walletSetting from './components/walletsetting';
 
 function App() {
   return (
@@ -99,6 +100,8 @@ function App() {
           <Route path={`${config.baseUrl}bannerImage`} exact component={bannerImage}/>
           <Route path={`${config.baseUrl}faqs`} exact component={faqs}/>
           <Route path={`${config.baseUrl}editNft/:id`} exact component={editNft} />
+          <Route path={`${config.baseUrl}walletSetting`} exact component={walletSetting}/>
+
 
 
           

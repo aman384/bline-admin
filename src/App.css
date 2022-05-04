@@ -136,7 +136,7 @@
 } */
 .discord-img img {
   width: 22px;
-  margin-bottom: -4px;
+  margin-bottom: -7px;
 }
 /* .socialicon-user .fa{
   padding-right: 3px;
@@ -152,10 +152,24 @@ a:hover {
   width: 100%;
 }
 .css-148o527-ItemComponent.react-dropdown-select-item-selected {
-  background: #081f3f!important;
-  color: #fff;
-  border-bottom: 1px solid #fff;
+  background: #fff!important;
+  color: #000!important;
+  border-bottom: 1px solid #ddd;
 }
+.css-148o527-ItemComponent:hover, .css-148o527-ItemComponent:focus {
+  background: rgba(0,116,217,0.1)!important;
+  outline: none;
+}
+
+.css-148o527-ItemComponent.react-dropdown-select-item-selected:hover{
+  background: rgba(0,116,217,0.1)!important;
+  outline: none;
+}
+span.react-dropdown-select-item.react-dropdown-select-item-selected.css-148o527-ItemComponent.evc32pp0 option:active{
+  background: rgba(0,116,217,0.1)!important;
+  outline: none;
+}
+
 .alert_validation{
   color: red;
 }
