@@ -2,7 +2,7 @@
   "name": "bline-admin",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://espsofttech.org/bline-admin-new/",
+  "homepage": "http://localhost:3000/bline-admin-new/",
   "dependencies": {
     "@ashvin27/react-datatable": "^1.5.3",
     "@blueprintjs/core": "^3.53.0",
