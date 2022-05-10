@@ -4,19 +4,19 @@ const config = {
 
   //===============================================  Local ======================================================
 
-  // baseUrl: '/bline-admin-new/',
-  // apiUrl: "http://localhost:8008/api/",
-  // blockchinUrl: "https://rinkeby.etherscan.io/address/",
-  // blockchainUrltrx: "https://rinkeby.etherscan.io/tx/",
-  // imageUrl1: "https://espsofttech.org/bline/backend/uploads/",
-
-  //======================================  Esp org ============================================================
-
   baseUrl: '/bline-admin-new/',
-  apiUrl: "https://espsofttech.org:6021/api/",
+  apiUrl: "http://localhost:8008/api/",
   blockchinUrl: "https://rinkeby.etherscan.io/address/",
   blockchainUrltrx: "https://rinkeby.etherscan.io/tx/",
   imageUrl1: "https://espsofttech.org/bline/backend/uploads/",
+
+  //======================================  Esp org ============================================================
+
+  // baseUrl: '/bline-admin-new/',
+  // apiUrl: "https://espsofttech.org:6021/api/",
+  // blockchinUrl: "https://rinkeby.etherscan.io/address/",
+  // blockchainUrltrx: "https://rinkeby.etherscan.io/tx/",
+  // imageUrl1: "https://espsofttech.org/bline/backend/uploads/",
 
   //==============================================================================================================
 
