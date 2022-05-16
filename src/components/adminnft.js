@@ -158,21 +158,22 @@ export default class adminnft extends Component {
                 text: "Action",
                 cell: (item) => {
                     return (
-                        <> 
-                            <div className='d-flex' style={{ display: "flex", position:"relative", height:"26px", width:"216px" }}>
+                        <>
+                            <div className='d-flex' style={{ display: "flex", position: "relative", height: "26px", width: "216px" }}>
                                 {/* <button type="submit" onClick={this.editDataAPI.bind(this, item)} data-toggle="modal" data-target="#responsive-modal2" className="btn-primary" data-original-title="Edit"> <i class="fa fa-pencil text-inverse m-r-10"></i> </button>&nbsp; */}
                                 {item.is_active == 1 ?
                                     <button type="submit" onClick={this.hideNFTAPI.bind(this, item)} data-toggle="tooltip" data-original-title="Close" className=" btn-primary"> <i class="fa fa-minus-square m-r-10"></i> </button> :
                                     <button type="submit" onClick={this.showNFTAPI.bind(this, item)} data-toggle="tooltip" data-original-title="Close" className=" btn-primary"> <i class="fa fa-plus-square m-r-10"></i> </button>
                                 }&nbsp;
-                                {this.loginData?.id == item.owner_id ?
+                                {console.log(this.loginData?.data.id)}
+                                {this.loginData?.data.id == item.owner_id ?
                                     item.is_on_sale == 1 ?
-                                            <button type='button' className='btn-primary' id='cancelid'> <a onClick={this.cancelOrder.bind(this, item)} className='putonsale' style={{ color: "#fff" }} > Cancel listing </a></button>
+                                        <button type='button' className='btn-primary' id='cancelid'> <a onClick={this.cancelOrder.bind(this, item)} className='putonsale' style={{ color: "#fff" }} > Cancel listing </a></button>
                                         :
                                         <>
-                                                <button className='btn-primary'> <Link to={`${config.baseUrl}editNft/` + item.id} className="btn-primary"><i class="fa fa-pencil text-inverse m-r-10"></i></Link>&nbsp;</button>
-                                                <button className='btn-primary' id='putonsaleid'>   <a onClick={this.putOnSaleModelAPI.bind(this, item, 1)} className='putonsale' data-toggle="modal" data-target="#putOnSale"> Put on sale </a></button>
-                                        
+                                            <button className='btn-primary'> <Link to={`${config.baseUrl}editNft/` + item.id} className="btn-primary"><i class="fa fa-pencil text-inverse m-r-10"></i></Link>&nbsp;</button>
+                                            <button className='btn-primary' id='putonsaleid'>   <a onClick={this.putOnSaleModelAPI.bind(this, item, 1)} className='putonsale' data-toggle="modal" data-target="#putOnSale"> Put on sale </a></button>
+
                                         </>
                                     : ""}
                                 {item.sell_type == 2 ?
@@ -373,7 +374,7 @@ export default class adminnft extends Component {
         await axios({
             method: 'post',
             url: `${config.apiUrl}itemDetail`,
-            data: { 'item_id': item.id, 'user_id': this.loginData.id }
+            data: { 'item_id': item.id, 'user_id': this.loginData.data.id }
         }).then(response => {
             if (response.data.success === true) {
                 this.setState({
@@ -407,7 +408,7 @@ export default class adminnft extends Component {
     async BidAcceptAPI(itemData) {
         console.log(itemData.token_id);
         let tokenId = itemData.token_id;
-        alert(tokenId)
+        
         if (window.ethereum) {
 
             const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
@@ -834,12 +835,23 @@ export default class adminnft extends Component {
         })
 
         if (window.ethereum) {
-
             var web3 = '';
             web3 = new Web3(window.ethereum);
             const accounts = await web3.eth.getAccounts();
             let currentNetwork = await web3.currentProvider.chainId;
             web3.eth.defaultAccount = accounts[0];
+            if (!accounts[0]) {
+                toast.error('Please Connect to MetaMask.');
+                this.setState({
+                    spinLoader: '0',
+                    isPutonSale: 1,
+                    isDialogOpen1: false
+                })
+                setTimeout(() => {
+                    window.location.reload()
+                }, 3000);
+                return;
+            }
 
             // var ETH_mainnet = 0x1;
             // var ETH_testnet = 0x4;
@@ -1038,9 +1050,11 @@ export default class adminnft extends Component {
 
         if (this.state.item_name == '') {
             toast.error('Item name required');
+           
         }
         else if (this.state.description == '') {
             toast.error('Item description required');
+            
         }
         else if (!this.state.image_file) {
             toast.error('Item image required');
@@ -1064,7 +1078,7 @@ export default class adminnft extends Component {
             toast.error('Blockchain type required');
         }
         this.setState({
-            spinLoader: '1',
+            spinLoader: '0',
         })
         let formData = new FormData();
         let ImageFileHash = this.state.ImageFileHash;
@@ -1486,28 +1500,28 @@ export default class adminnft extends Component {
                             <div className="row">
                                 <div className="col-sm-12">
                                     <Dialog
-                                    className='create-popup'
+                                        className='create-popup'
                                         title={`You Created-${this.state.item_name}`}
                                         // icon="warning-sign"
                                         style={{
                                             color: '#3fa1f3',
                                             textAlign: "center",
-                                           
+
                                         }}
                                         isOpen={this.state.isDialogOpen}
                                         isCloseButtonShown={false}
                                     >
-                                        <div className="text-center pl-3 pr-3" style={{backgroundColor:"#fff"}}>
+                                        <div className="text-center pl-3 pr-3" style={{ backgroundColor: "#fff" }}>
                                             {/* <BarLoader color="#e84747" height="2" /> */}
                                             <br />
-                                            <h4 style={{ color: '#3fa1f3', fontSize: '16px',marginBottom:"15px"}}>To get set up for selling on marketplace, please put the item on sale</h4>
+                                            <h4 style={{ color: '#3fa1f3', fontSize: '16px', marginBottom: "15px" }}>To get set up for selling on marketplace, please put the item on sale</h4>
                                             {/* <p style={{ color: '#091f3f' }}>
               Please do not refresh page or close tab.
             </p> */}
                                             <div className='mb-3'>
                                                 <img src={`${this.state.image_preview}`} className="create-img" />
                                             </div>
-                                            <button type='button' style={{padding:"7px 35px"}} className='btn btn-primary' onClick={this.movePage.bind(this)}>Ok</button>
+                                            <button type='button' style={{ padding: "7px 35px" }} className='btn btn-primary' onClick={this.movePage.bind(this)}>Ok</button>
                                             {/* <div>
               <div class="spinner-border"></div>
             </div> */}
@@ -1915,16 +1929,16 @@ export default class adminnft extends Component {
                     <div className="modal-dialog" role="document">
 
                         <div className="modal-content create-popup">
-                        
+
                             <div className="modal-header">
-                            <a type="button" className="close" data-dismiss="modal" style={{
+                                <a type="button" className="close" data-dismiss="modal" style={{
                                     fontSize: '26px'
                                 }} aria-label="Close" onClick={this.modalShow.bind(this, 0)} >
                                     <span aria-hidden="true">&times;</span>
                                 </a>
-                                <img src='images/sale.png'className='sale-icon'/>
+                                <img src='images/sale.png' className='sale-icon' />
                                 <h5 className="modal-title" id="exampleModalLabel"> Put On Sale </h5>
-                               
+
                             </div>
 
                             <div className="modal-body">
@@ -1969,7 +1983,7 @@ export default class adminnft extends Component {
                                 <div className="spacer-10" />
                                 <br />
                                 {this.state.spinLoader === 0 ?
-                                    <input type="submit" onClick={this.approveNFT.bind(this, this.state.nftData)} value="Approve" id="submit" className="btn-primary" defaultValue="Create Item" style={{display:"flex",margin:"auto"}}/>
+                                    <input type="submit" onClick={this.approveNFT.bind(this, this.state.nftData)} value="Approve" id="submit" className="btn-primary" defaultValue="Create Item" style={{ display: "flex", margin: "auto" }} />
                                     :
                                     <button disabled className="btn-main" id="deposit-page" >Processing &nbsp; <i className="fa fa-spinner fa-spin validat"></i></button>
                                 }

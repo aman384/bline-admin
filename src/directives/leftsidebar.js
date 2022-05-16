@@ -28,6 +28,7 @@ export default class Leftsidebar extends Component {
                  */}
                  {/* style={{width:fname==undefined || fname == 0 ?'225px':'50px'}} */}
                  <div >
+                 <i className="zmdi zmdi-menu"></i>
                  <div className="fixed-sidebar-left mobileLeftShow">
                 <ul className="nav navbar-nav side-nav nicescroll-bar">
                     <li className="navigation-header">
