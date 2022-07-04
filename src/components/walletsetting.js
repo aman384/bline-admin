@@ -53,7 +53,7 @@ export default class walletSetting extends Component {
         const contract = await new web3.eth.Contract(config.abiMarketplace, contractAddress);
         var from_address = accounts[0];
         web3.eth.defaultAccount = from_address;
-        let myToken = await contract.methods.owner().call();
+        let myToken = await contract.methods.settlementFeeAddress().call();
         this.setState({
             admin_address: myToken
         })
@@ -268,8 +268,8 @@ export default class walletSetting extends Component {
                                                     <div className="row">
                                                         <div className="col-md-12">
                                                             <div className="form-group">
-                                                                <label className="control-label mb-10">Admin Wallet Public Key</label>
-                                                                <input type="text" onChange={this.handleChange} name="admin_address" disabled className="form-control" placeholder="Admin Wallet Public Key" value={this.state.admin_address} />
+                                                                <label className="control-label mb-10">Settlement fees address</label>
+                                                                <input type="text" onChange={this.handleChange} name="admin_address" disabled className="form-control" placeholder="Settlement fees address" value={this.state.admin_address} />
                                                             </div>
                                                         </div>
                                                     </div>

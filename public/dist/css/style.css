@@ -6145,8 +6145,9 @@ a.compose-mail {
     .flex-stat li > span {
       text-transform: capitalize; }
 
-.sm-data-box .counter {
-  font-size: 24px; }
+      .sm-data-box .counter {
+        font-size: 19px;
+    }
 .sm-data-box .data-wrap-left,
 .sm-data-box .data-wrap-right {
   /* padding-top: 19px; */
@@ -7424,10 +7425,10 @@ span.discord-imgs img {
   overflow-x: hidden;
 }
 .dashboar-main .panel.panel-default.card-view.pa-0 {
-  height: 150px;
+  height: 148px;
   box-shadow: 0px 6px 10px #00000069;
   background: linear-gradient(259deg, #13468d, #02055e);
-  padding: 20px!important;
+  padding: 10px!important;
 }
 /* .dashboar-main .panel.panel-default.card-view:hover{
   background-color: #31a1f2e3;
@@ -7556,4 +7557,12 @@ button#cancelid {
 }
 .jodit-toolbar__box {
   z-index: 0 !important;
+}
+.container.pt-2 {
+  margin-left: -50px!important;
+  /* margin-right: 47px!important; */
+}
+.graph-dropdown {
+  width: 50%;
+  margin: 5px auto;
 }
